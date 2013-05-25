@@ -8,11 +8,12 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements GameStatusCompleteListener {
 	
 	GameStatus scanStatus;
 	
 	@Override
+<<<<<<< HEAD
 	public void onBackPressed() {
 		  finish();
 		System.exit(0);
@@ -24,6 +25,11 @@ public class MainActivity extends Activity {
 		scanStatus = s;
 		TextView textView2 = (TextView) findViewById(R.id.textView2);
 		textView2.setText(s.getSupportAsText());
+=======
+	public void setString(String s){
+		TextView textView1 = (TextView) findViewById(R.id.textView1);
+		textView1.setText(s);
+>>>>>>> origin/dev-backend
 	}
 	
 
@@ -48,13 +54,37 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	public void onGameStatusComplete(){
+		setString("WOOOOOOOOOOO!");
+		if (scanStatus.wasSuccessful()){
+			setString(scanStatus.getSupportAsText());
+		}else{
+			setString("Not found in databases.");
+		}
+	}
+	
+	@Override
+	public void onGameStatusError(Exception ex){
+		setString("BOOOOOOOOO!");
+		setString(ex.toString());
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (requestCode == 1) {
 
 			if(resultCode == RESULT_OK){      
-				String result=data.getStringExtra("barcode");
-				setScanStatus(new GameStatus(result));
+				String barcode=data.getStringExtra("barcode");
+				String result = "Looking up " + barcode + ".";
+				try{
+					scanStatus = new GameStatus(barcode, this);
+					Thread gameStatusThread = new Thread(scanStatus);
+					gameStatusThread.start();
+				}catch (Exception e){
+					result = e.toString();
+				}
+				setString(result);
 			}
 			if (resultCode == RESULT_CANCELED) {    
 				//Do nothing! Wait for the user to initiate another go.

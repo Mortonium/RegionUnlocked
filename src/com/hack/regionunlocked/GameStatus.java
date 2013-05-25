@@ -7,8 +7,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.net.URL;
+import java.net.HttpURLConnection;
 
-public class GameStatus {
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+public class GameStatus implements Runnable {
 
 	private String upcCode;
 	private String name;
@@ -16,30 +23,60 @@ public class GameStatus {
 	private List<RegionSupportStatusSet> support;
 	private String scandItKey = "key=-rdsomoapvSlt5JjXpPNr0WfBpw-H7f5R9JJMnIbw5J";
 	private boolean found = false;
-	private boolean failed = false;
+	
+	private GameStatusCompleteListener listener;
+	private boolean success = false;
 
-	public GameStatus(String upcCode) {
+	public GameStatus(String upcCode, GameStatusCompleteListener listener) {
 		this.upcCode = upcCode;
-		this.name = getUPCDatabaseName(upcCode);
-		this.checkName = getScandItName(upcCode);
-		found = checkNames();
-
-		if (found == true)
-			checkStatusWikia();
+		this.listener = listener;
 	}
 
-	public boolean hasFailed() {
-		return this.failed;
-	}
+	public void run() {
+		try {
+			this.success = false;
+			listener.setString("1");
+			if (upcCode.equals("")) {
+				listener.setString("2");
+				throw new GameStatusException("No UPC code specified");
+			} else {
 
-	private String getScandItName(String upcCode) {
+				listener.setString("3");
+				this.name = getUPCDatabaseName(upcCode);
+				listener.setString("4");
+				this.checkName = getScandItName(upcCode);
+				listener.setString("5");
+				found = checkNames();
+				listener.setString("6");
+				
+				if (found == true) {
+					listener.setString("7");
+					checkStatusWikia();
+				}
+				listener.setString("8");
+				
+				listener.onGameStatusComplete();
+				listener.setString("9");
+				
+			}
+		} catch (Exception ex) {
+			listener.setString("10");
+			this.success = false;
+			listener.onGameStatusError(ex);
+		}
+	}
+	public boolean wasSuccessful() {
+		return success;
+	}
+	
+	private String getScandItName(String upcCode) throws GameStatusException {
 		String url = "https://api.scandit.com/v2/products/" + upcCode + "?"
 				+ scandItKey;
 
 		String content = getWebsiteContent(url);
 
+		try{
 		if (content.contains("name")) {
-
 			String strip = content.substring(18);
 			int check = strip.indexOf("\"");
 			strip = strip.substring(0, check);
@@ -51,9 +88,12 @@ public class GameStatus {
 		} else {
 			return "";
 		}
+		}catch(Exception e){
+			throw new GameStatusException("Couldn't find Game name in scandit");
+		}
 	}
 
-	private String getUPCDatabaseName(String upcCode) {
+	private String getUPCDatabaseName(String upcCode) throws GameStatusException {
 		// 885370201215 = Gears of War 3
 		String content = getWebsiteContent("http://www.upcdatabase.com/item/"
 				+ upcCode);
@@ -65,23 +105,24 @@ public class GameStatus {
 
 		try {
 
-			matcher.find();
+			if (!matcher.find())
+				throw new GameStatusException("getUPCDatabaseName fail (No regex match).");
 			return matcher.group(1);
 
 		} catch (Exception ex) {
-			return "";
+			throw new GameStatusException("getUPCDatabaseName fail:\n\n" + ex.getMessage());
 		}
 
 	}
 
-	private boolean checkNames() {
+	private boolean checkNames() throws GameStatusException {
 		if (name.contains(checkName))
 			return true;
 		else
 			return false;
 	}
 
-	private void checkStatusWikia() {
+	private void checkStatusWikia() throws GameStatusException {
 
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
@@ -100,8 +141,11 @@ public class GameStatus {
 
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(content);
-
+			
+			boolean matchFound = false;
 			while (matcher.find()) {
+				matchFound = true;
+				success = true;
 
 				GameRegion region = GameRegion.UNKNOWN;
 				if (matcher.group(1).equals("NTSC/J"))
@@ -148,64 +192,124 @@ public class GameStatus {
 					support.add(set);
 				}
 			}
+			
 		}
 	}
 
-	private String getWebsiteContent(String urlString) {
+	private String getWebsiteContent(String urlString) throws GameStatusException {
+		int i = 0;
 		try {
+			listener.setString("3.1");
+			//InputStream inStream = retrieveStream(urlString); i++;
 			URL url = new URL(urlString);
-			InputStream inStream = url.openStream();
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setReadTimeout(10000 /* milliseconds */);
+			con.setConnectTimeout(15000 /* milliseconds */);
+			con.setRequestMethod("GET");
+			con.setDoInput(true);
+			con.addRequestProperty("Referer", "http://blog.dahanne.net");
+			con.connect();
+			InputStream inStream = con.getInputStream();
+			// URL url = new URL(urlString);
+			// InputStream inStream = url.openStream();
+			listener.setString("3.2");
 			BufferedReader br = new BufferedReader(new InputStreamReader(
-					inStream));
+					inStream)); i++;
+			listener.setString("3.3");
 			String content = "";
 			String line;
 			while ((line = br.readLine()) != null) {
-				content += line;
+				content += line; i++;
 			}
 			return content;
 		} catch (Exception ex) {
-			return "";
+			throw new GameStatusException("getWebsiteContent fail:\n\n" + ex);
 		}
 	}
 	
+	private InputStream retrieveStream(String url) throws GameStatusException {
+
+		listener.setString("3.1.1");
+        DefaultHttpClient client = new DefaultHttpClient();
+
+		listener.setString("3.1.2");
+        HttpGet httpRequest = new HttpGet(url);
+
+        try {
+
+			listener.setString("3.1.3");
+           HttpResponse httpResponse = client.execute(httpRequest);
+			listener.setString("3.1.4");
+           final int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+			listener.setString("3.1.5");
+           if (statusCode != HttpStatus.SC_OK) {
+        	   throw new GameStatusException("retrieveStream fail:\n\n status code: " + statusCode + 
+        			   "\nurl: " + url);
+           }
+
+			listener.setString("3.1.6");
+           HttpEntity httpEntity = httpResponse.getEntity();
+           return httpEntity.getContent();
+
+        }
+        catch (Exception e) {
+        	httpRequest.abort();
+        	throw new GameStatusException("retrieveStream fail:\n\n url: " + url + "\n\n" + e);
+        }
+
+     }
+
 	public String getSupportAsText() {
 		if ((support == null) || (support.size() == 0)) {
 			return "No Results";
 		} else {
 			String result = "";
 			for (int i = 0; i < support.size(); i++) {
-				result += "Version: " + GameRegionToString(support.get(i).gameRegion) + "\n";
-				result += "\tNTSC/J: " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_J)) + "\n";
-				result += "\tNTSC/U: " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_U)) + "\n";
-				result += "\tPAL:    " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.PAL)) + "\n";
+				result += "Version: "
+						+ GameRegionToString(support.get(i).gameRegion) + "\n";
+				result += "\tNTSC/J: "
+						+ RegionSupportStatusToString(support.get(i).supportStatuses
+								.get(GameRegion.NTSC_J)) + "\n";
+				result += "\tNTSC/U: "
+						+ RegionSupportStatusToString(support.get(i).supportStatuses
+								.get(GameRegion.NTSC_U)) + "\n";
+				result += "\tPAL:    "
+						+ RegionSupportStatusToString(support.get(i).supportStatuses
+								.get(GameRegion.PAL)) + "\n";
 				result += "\n";
 			}
 			result += "\n";
 			return result;
 		}
 	}
-	
+
+	public List<RegionSupportStatusSet> getSupport() {
+		return support;
+	}
+
 	private String GameRegionToString(GameRegion region) {
 		switch (region) {
-			case NTSC_J:
-				return "NTSC/J";
-			case NTSC_U:
-				return "NTSC/U";
-			case PAL:
-				return "PAL";
-			default:
-				return "Unknown";
+		case NTSC_J:
+			return "NTSC/J";
+		case NTSC_U:
+			return "NTSC/U";
+		case PAL:
+			return "PAL";
+		default:
+			return "Unknown";
 		}
 	}
+
 	private String RegionSupportStatusToString(RegionSupportStatus status) {
 		switch (status) {
-			case Yes:
-				return "Yes";
-			case No:
-				return "No";
-			default:
-				return "Unknown";
+		case Yes:
+			return "Yes";
+		case No:
+			return "No";
+		default:
+			return "Unknown";
 		}
 	}
-	
+
 }
