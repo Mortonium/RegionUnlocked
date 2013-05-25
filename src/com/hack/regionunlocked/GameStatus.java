@@ -52,6 +52,8 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 
 				this.nameUPCDatabase = getUPCDatabaseName(upcCode);
 				this.nameScandit = getScandItName(upcCode);
+				System.out.println(nameUPCDatabase);
+				System.out.println(nameScandit);
 				found = checkNames();
 				
 				if (found == true) {
