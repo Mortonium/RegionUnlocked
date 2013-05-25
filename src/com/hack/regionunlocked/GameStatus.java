@@ -61,7 +61,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 					return checkStatusWikia();
 				}
 				
-				throw new GameStatusError("Name not found");
+				throw new GameStatusException("Name not found");
 				
 			}
 		} catch (Exception e) {
