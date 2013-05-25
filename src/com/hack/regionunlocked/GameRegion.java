@@ -1,6 +1,6 @@
 package com.hack.regionunlocked;
 
-public enum Region {
+public enum GameRegion {
 	PAL,
 	NTSC_U,
 	NTSC_J
