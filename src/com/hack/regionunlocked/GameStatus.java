@@ -13,6 +13,12 @@ public class GameStatus {
 		this.upcCode = upcCode;
 	}
 	
+	private void checkStatus() {
+		if (!this.name.equals("")) {
+			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
+			
+		}
+	}
 	private String getWebsiteContent(String urlString) {
 		try {
 			URL url = new URL(urlString);
