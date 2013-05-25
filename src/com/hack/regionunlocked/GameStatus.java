@@ -76,6 +76,8 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		listener.setString("test end");
 		if (success)
 			listener.onGameStatusComplete();
+		if (ex == null)
+			listener.onGameStatusError(new GameStatusException("Unknown Error"));
 		listener.onGameStatusError(ex);
 	}
 	private String downloadUrl(String myurl) throws Exception {
