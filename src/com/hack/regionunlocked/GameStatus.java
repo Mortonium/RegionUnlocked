@@ -1,6 +1,7 @@
 package com.hack.regionunlocked;
 
-import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.io.InputStream;
@@ -12,11 +13,11 @@ public class GameStatus {
 	
 	private String upcCode;
 	private String name;
-	private GameRegion gameRegion;
-	private HashMap<GameRegion,RegionSupportStatus> supportStatuses;
+	private List<RegionSupportStatusSet> support;
 	
 	public GameStatus(String upcCode) {
 		this.upcCode = upcCode;
+		this.name = getUPCDatabaseName(upcCode);
 	}
 	
 	private String getUPCDatabaseName(String upcCode) {
@@ -38,7 +39,7 @@ public class GameStatus {
 		}
 		
 	}
-	private void checkStatus() {
+	private void checkStatusWikia() {
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
 			
@@ -51,12 +52,60 @@ public class GameStatus {
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(content);
 
-			matcher.find();
-			// System.out.println("\n\n");
-			// System.out.println(matcher.group(1));
-			// System.out.println(matcher.group(2));
-			// System.out.println(matcher.group(3));
-			// System.out.println(matcher.group(4));
+			while (matcher.find()) {
+				
+				GameRegion region = GameRegion.UNKNOWN;
+				switch (matcher.group(1)) {
+					case "NTSC/J":
+						region = GameRegion.NTSCJ;
+						break;
+					case "NTSC/U": case "US":
+						region = GameRegion.NTSCU;
+						break;
+					case "PAL":
+						region = GameRegion.PAL;
+						break;
+				}
+				if (region != GameRegion.UNKNOWN) {
+					RegionSupportStatusSet set = new RegionSupportStatusSet(region);
+					switch (matcher.group(2)) {
+						case "Yes":
+							set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.Yes);
+							break;
+						case "No":
+							set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.No);
+							break;
+						case "?":
+							set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.Unknown);
+							break;
+					}
+					switch (matcher.group(3)) {
+						case "Yes":
+							set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.Yes);
+							break;
+						case "No":
+							set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.No);
+							break;
+						case "?":
+							set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.Unknown);
+							break;
+					}
+					switch (matcher.group(4)) {
+						case "Yes":
+							set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Yes);
+							break;
+						case "No":
+							set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.No);
+							break;
+						case "?":
+							set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Unknown);
+							break;
+					}
+					support.add(set);
+				}
+				
+			}
+			
 		}
 	}
 	private String getWebsiteContent(String urlString) {
