@@ -108,7 +108,7 @@ public class GameStatus implements Runnable {
 			return false;
 	}
 
-	private checkStatusWikia() throws GameStatusException {
+	private void checkStatusWikia() throws GameStatusException {
 
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");

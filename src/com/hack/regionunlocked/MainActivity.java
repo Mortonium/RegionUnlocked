@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements GameStatusCompleteListener {
 	
 	GameStatus scanStatus;
 	
@@ -37,20 +37,32 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	public void onGameStatusComplete(){
+		if (scanStatus.wasSuccessful()){
+			setString(scanStatus.getSupportAsText());
+		}else{
+			setString("Not found in databases.");
+		}
+	}
+	
+	@Override
+	public void onGameStatusError(GameStatusException ex){
+		setString(ex.toString());
+	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (requestCode == 1) {
 
 			if(resultCode == RESULT_OK){      
 				String barcode=data.getStringExtra("barcode");
-				String result = "Nothing found with barcode:" + barcode + ".";
+				String result = "Looking up " + barcode + ".";
 				try{
-					GameStatus status = new GameStatus();
-					if (status.run(barcode)){
-						result = status.getSupportAsText();
-					}
-				}catch (GameStatusException e){
-					result = e.getMessage();
+					scanStatus = new GameStatus(barcode, this);
+					Thread gameStatusThread = new Thread(scanStatus);
+				}catch (Exception e){
+					result = e.toString();
 				}
 				setString(result);
 			}
