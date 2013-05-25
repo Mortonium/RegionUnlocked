@@ -5,11 +5,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	
+	GameStatus scanStatus;
+	
+	protected void setScanStatus(GameStatus s){
+		scanStatus = s;
+		TextView textView1 = (TextView) findViewById(R.id.textView1);
+		textView1.setText(s.getSupportAsText());
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,7 +25,8 @@ public class MainActivity extends Activity {
 		ImageButton scanButton = (ImageButton) findViewById(R.id.scanButton);
 	    scanButton.setOnClickListener(new View.OnClickListener() {
 	    	public void onClick(View v) {
-	    		startActivity(new Intent(getApplicationContext(), ScanBarcodeActivity.class));
+	    		Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
+	    		startActivityForResult(clickIntent, 1);
 			 }
 		 });
 	}
@@ -28,6 +36,20 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (requestCode == 1) {
+
+			if(resultCode == RESULT_OK){      
+				String result=data.getStringExtra("barcode");
+				setScanStatus(new GameStatus(result));
+			}
+			if (resultCode == RESULT_CANCELED) {    
+				//Do nothing! Wait for the user to initiate another go.
+		    }
+		}
 	}
 
 }

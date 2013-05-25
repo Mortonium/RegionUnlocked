@@ -1,7 +1,6 @@
 package com.hack.regionunlocked;
 
 import java.util.List;
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.io.InputStream;
@@ -17,6 +16,7 @@ public class GameStatus {
 	private List<RegionSupportStatusSet> support;
 	private String scandItKey = "key=-rdsomoapvSlt5JjXpPNr0WfBpw-H7f5R9JJMnIbw5J";
 	private boolean found = false;
+	private boolean failed = false;
 
 	public GameStatus(String upcCode) {
 		this.upcCode = upcCode;
@@ -24,15 +24,16 @@ public class GameStatus {
 		this.checkName = getScandItName(upcCode);
 		found = checkNames();
 
-		if (found == true) {
+		if (found == true)
 			checkStatusWikia();
-		} else {
-			// ERROR CODES
-		}
+	}
+
+	public boolean hasFailed() {
+		return this.failed;
 	}
 
 	private String getScandItName(String upcCode) {
-		String url = "https://api.scandit.com/v2/products/" + upcCode
+		String url = "https://api.scandit.com/v2/products/" + upcCode + "?"
 				+ scandItKey;
 
 		String content = getWebsiteContent(url);
@@ -173,10 +174,10 @@ public class GameStatus {
 		} else {
 			String result = "";
 			for (int i = 0; i < support.size(); i++) {
-				result += "Version: " + GameRegionToString(support.gameRegion) + "\n";
-				result += "\tNTSC/J: " + RegionSupportStatusToString(support.get(GameRegion.NTSC_J)) + "\n";
-				result += "\tNTSC/U: " + RegionSupportStatusToString(support.get(GameRegion.NTSC_U)) + "\n";
-				result += "\tPAL:    " + RegionSupportStatusToString(support.get(GameRegion.PAL)) + "\n";
+				result += "Version: " + GameRegionToString(support.get(i).gameRegion) + "\n";
+				result += "\tNTSC/J: " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_J)) + "\n";
+				result += "\tNTSC/U: " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_U)) + "\n";
+				result += "\tPAL:    " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.PAL)) + "\n";
 				result += "\n";
 			}
 			result += "\n";
@@ -189,11 +190,11 @@ public class GameStatus {
 	
 	private String GameRegionToString(GameRegion region) {
 		switch (region) {
-			case GameRegion.NTSC_J:
+			case NTSC_J:
 				return "NTSC/J";
-			case GameRegion.NTSC_U:
+			case NTSC_U:
 				return "NTSC/U";
-			case GameRegion.PAL:
+			case PAL:
 				return "PAL";
 			default:
 				return "Unknown";
@@ -201,9 +202,9 @@ public class GameStatus {
 	}
 	private String RegionSupportStatusToString(RegionSupportStatus status) {
 		switch (status) {
-			case RegionSupportStatus.Yes:
+			case Yes:
 				return "Yes";
-			case RegionSupportStatus.No:
+			case No:
 				return "No";
 			default:
 				return "Unknown";
