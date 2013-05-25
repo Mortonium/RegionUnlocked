@@ -1,5 +1,7 @@
 package com.hack.regionunlocked;
 
+import android.os.AsyncTask;
+
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -15,7 +17,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class GameStatus extends extends AsyncTask<String, Void, String> {
+public class GameStatus extends AsyncTask<String, Void, String> {
 
 	private String upcCode;
 	private String name;
