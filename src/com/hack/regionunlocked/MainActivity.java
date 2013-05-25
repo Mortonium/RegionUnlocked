@@ -12,6 +12,12 @@ public class MainActivity extends Activity {
 	
 	GameStatus scanStatus;
 	
+	@Override
+	public void onBackPressed() {
+		  finish();
+		System.exit(0);
+		}
+	
 	protected void setScanStatus(GameStatus s){
 		this.startActivity(new Intent(MainActivity.this,ResultsActivity.class)); 
 		setContentView(R.layout.results);

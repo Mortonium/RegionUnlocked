@@ -13,7 +13,7 @@ public class ResultsActivity extends Activity {
 
 	@Override
 	public void onBackPressed() {
-		//finish();
+		finish();
 		
 		 this.startActivity(new Intent(ResultsActivity.this,MainActivity.class));  
 	}
