@@ -182,7 +182,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	private boolean checkStatusWikia() throws GameStatusException {
 
 		if (!this.name.equals("")) {
-			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
+			String content = downloadUrl("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
 
 			String regex = "(?i)<td>[\\s]*<a href=\"[^\"]*\"[^>]*>"
 					+ this.name
