@@ -14,7 +14,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class GameStatus {
+public class GameStatus implements Runnable {
 
 	private String upcCode;
 	private String name;
@@ -22,27 +22,37 @@ public class GameStatus {
 	private List<RegionSupportStatusSet> support;
 	private String scandItKey = "key=-rdsomoapvSlt5JjXpPNr0WfBpw-H7f5R9JJMnIbw5J";
 	private boolean found = false;
+	
+	private GameStatusCompleteListener listener;
+	private boolean success = false;
 
-	public GameStatus() {
-
+	public GameStatus(String upcCode, GameStatusCompleteListener listener) {
+		this.upcCode = upcCode;
 	}
 
-	public boolean run(String upcCode) throws GameStatusException {
-		this.upcCode = upcCode;
-		if (upcCode.equals("")) {
-			throw new GameStatusException("No UPC code specified");
-		} else {
+	public void run() {
+		try {
+			this.success = false;
+			if (upcCode.equals("")) {
+				throw new GameStatusException("No UPC code specified");
+			} else {
 
-			this.name = getUPCDatabaseName(upcCode);
-			this.checkName = getScandItName(upcCode);
-			found = checkNames();
-
-			if (found == true)
-				return checkStatusWikia();
-			
-			return true;
-			
+				this.name = getUPCDatabaseName(upcCode);
+				this.checkName = getScandItName(upcCode);
+				found = checkNames();
+				
+				if (found == true)
+					checkStatusWikia();
+				
+			}
+		} catch (Exception ex) {
+			this.success = false;
+		} finally {
+			listener.onGameStatusComplete();
 		}
+	}
+	public boolean wasSuccessful() {
+		return success;
 	}
 	
 	private String getScandItName(String upcCode) throws GameStatusException {
@@ -98,7 +108,7 @@ public class GameStatus {
 			return false;
 	}
 
-	private boolean checkStatusWikia() throws GameStatusException {
+	private checkStatusWikia() throws GameStatusException {
 
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
@@ -121,6 +131,7 @@ public class GameStatus {
 			boolean matchFound = false;
 			while (matcher.find()) {
 				matchFound = true;
+				success = true;
 
 				GameRegion region = GameRegion.UNKNOWN;
 				if (matcher.group(1).equals("NTSC/J"))
@@ -168,10 +179,6 @@ public class GameStatus {
 				}
 			}
 			
-			return matchFound;
-			
-		} else {
-			return false;
 		}
 	}
 
