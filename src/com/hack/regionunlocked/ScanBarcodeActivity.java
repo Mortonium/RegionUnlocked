@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
 
 public class ScanBarcodeActivity extends Activity 
 						  implements ScanditSDKListener {
@@ -36,8 +35,7 @@ public class ScanBarcodeActivity extends Activity
 	@Override
 	public void didScanBarcode(String barcode, String symbology) {
 		mBarcodePicker.stopScanning();
-	
-		setContentView(R.layout.activity_main);
+		finish();
 	}
 
 	@Override
