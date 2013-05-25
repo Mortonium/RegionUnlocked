@@ -29,6 +29,8 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 	
 	private GameStatusCompleteListener listener;
 	private boolean success = false;
+	
+	private Exception ex;
 
 	public GameStatus(String upcCode, GameStatusCompleteListener listener) {
 		this.upcCode = upcCode;
@@ -98,6 +100,8 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 				
 			}
 		} catch (Exception e) {
+			this.ex = e;
+			this.success = false;
 			return "Unable to retrieve web page. URL may be invalid." + e;
 		}
 	}
@@ -107,7 +111,7 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 		listener.setString("test end");
 		if (success)
 			listener.onGameStatusComplete();
-		listener.onGameStatusError(new Exception());
+		listener.onGameStatusError(ex);
 	}
 	private String downloadUrl(String myurl) throws Exception {
 		InputStream is = null;
