@@ -41,17 +41,18 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 	@Override
 	public void onGameStatusComplete(){
 		setString("WOOOOOOOOOOO!");
+		/*
 		if (scanStatus.wasSuccessful()){
 			setString(scanStatus.getSupportAsText());
 		}else{
 			setString("Not found in databases.");
 		}
+		*/
 	}
 	
 	@Override
 	public void onGameStatusError(Exception ex){
-		setString("BOOOOOOOOO!");
-		setString(ex.toString());
+		setString(ex.getMessage());
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

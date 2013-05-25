@@ -44,7 +44,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	
 	
 	@Override
-	protected boolean doInBackground() {
+	protected Boolean doInBackground(Void... lolwut) {
 		  
 		// params comes from the execute() call: params[0] is the url.
 		try {
@@ -95,11 +95,12 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			conn.connect();
 			int response = conn.getResponseCode();
 			is = conn.getInputStream();
-
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					is));
 			String content = "";
 			String line;
 			while ((line = br.readLine()) != null) {
-				content += line; i++;
+				content += line;
 			}
 			return content;
 			/*
