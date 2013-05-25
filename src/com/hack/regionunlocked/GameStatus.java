@@ -120,17 +120,6 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			} 
 		}
 	}
-	public String readIt(InputStream stream, int len) throws Exception {
-		Reader reader = null;
-		reader = new InputStreamReader(stream, "UTF-8");        
-		char[] buffer = new char[len];
-		reader.read(buffer);
-		return new String(buffer);
-	}
-	
-	
-	
-	
 	
 	private String getScandItName(String upcCode) throws Exception {
 		String url = "https://api.scandit.com/v2/products/" + upcCode + "?" + scandItKey;
@@ -139,17 +128,17 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		String content = downloadUrl(url);
 
 		try{
-		if (content.contains("name")) {
-			String strip = content.substring(18);
-			int check = strip.indexOf("\"");
-			strip = strip.substring(0, check);
-			check = strip.indexOf("0");
-			strip = strip.substring(0, check - 9);
-			checkName = strip;
-			return strip;
-		} else {
-			return "";
-		}
+			if (content.contains("name")) {
+				String strip = content.substring(18);
+				int check = strip.indexOf("\"");
+				strip = strip.substring(0, check);
+				check = strip.indexOf("0");
+				strip = strip.substring(0, check - 9);
+				checkName = strip;
+				return strip;
+			} else {
+				return "";
+			}
 		}catch(Exception e){
 			throw new GameStatusException("Couldn't find Game name in scandit");
 		}
@@ -159,13 +148,12 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		// 885370201215 = Gears of War 3
 		// String content = getWebsiteContent("http://www.upcdatabase.com/item/" + upcCode);
 		String content = downloadUrl("http://www.upcdatabase.com/item/" + upcCode);
-
-		String regex = "<td>Description</td><td></td><td>(.*?)</td>";
-
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(content);
-
+		
 		try {
+			String regex = "<td>Description</td><td></td><td>(.*?)</td>";
+
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(content);
 
 			if (!matcher.find())
 				throw new GameStatusException("getUPCDatabaseName fail (No regex match).");
@@ -264,79 +252,6 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		}
 	}
 
-	
-	
-	
-	
-	private String getWebsiteContent(String urlString) throws GameStatusException {
-		
-		int i = 0;
-		try {
-			listener.setString("3.1");
-			//InputStream inStream = retrieveStream(urlString); i++;
-			URL url = new URL(urlString);
-			HttpURLConnection con = (HttpURLConnection) url.openConnection();
-			con.setReadTimeout(10000 /* milliseconds */);
-			con.setConnectTimeout(15000 /* milliseconds */);
-			con.setRequestMethod("GET");
-			con.setDoInput(true);
-			con.connect();
-			InputStream inStream = con.getInputStream();
-			// URL url = new URL(urlString);
-			// InputStream inStream = url.openStream();
-			listener.setString("3.2");
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					inStream)); i++;
-			listener.setString("3.3");
-			String content = "";
-			String line;
-			while ((line = br.readLine()) != null) {
-				content += line; i++;
-			}
-			return content;
-		} catch (Exception ex) {
-			throw new GameStatusException("getWebsiteContent fail:\n\n" + ex);
-		}
-		
-	}
-	
-	private InputStream retrieveStream(String url) throws GameStatusException {
-
-		listener.setString("3.1.1");
-        DefaultHttpClient client = new DefaultHttpClient();
-
-		listener.setString("3.1.2");
-        HttpGet httpRequest = new HttpGet(url);
-
-        try {
-
-			listener.setString("3.1.3");
-           HttpResponse httpResponse = client.execute(httpRequest);
-			listener.setString("3.1.4");
-           final int statusCode = httpResponse.getStatusLine().getStatusCode();
-
-			listener.setString("3.1.5");
-           if (statusCode != HttpStatus.SC_OK) {
-        	   throw new GameStatusException("retrieveStream fail:\n\n status code: " + statusCode + 
-        			   "\nurl: " + url);
-           }
-
-			listener.setString("3.1.6");
-           HttpEntity httpEntity = httpResponse.getEntity();
-           return httpEntity.getContent();
-
-        }
-        catch (Exception e) {
-        	httpRequest.abort();
-        	throw new GameStatusException("retrieveStream fail:\n\n url: " + url + "\n\n" + e);
-        }
-
-     }
-
-	 
-	 
-	 
-	 
 	public String getSupportAsText() {
 		if ((support == null) || (support.size() == 0)) {
 			return "No Results";
