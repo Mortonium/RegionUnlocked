@@ -200,6 +200,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			
 			boolean matchFound = false;
 			while (matcher.find()) {
+				System.out.println("#####################\n#######################\n####################");
 				matchFound = true;
 				success = true;
 
