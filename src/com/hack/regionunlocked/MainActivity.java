@@ -52,6 +52,7 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 	
 	@Override
 	public void onGameStatusError(Exception ex){
+		System.out.println("Because fuck you, that's why.");
 		setString(ex.toString());
 	}
 	
