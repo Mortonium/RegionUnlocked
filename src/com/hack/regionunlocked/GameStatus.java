@@ -42,25 +42,21 @@ public class GameStatus {
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
 			
-			String regexName = this.name;
-			for (int i = this.name.length() - 1; i >= 0; i--) {
-				
-			}
-			String regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Alan Wake</a>[\\s]*</td>[\\s]*(.*?)</tr>";
+			String regex = "(?i)<td>[\\s]*<a href=\"[^\"]*\"[^>]*>" + this.name + "</a>[\\s]*</td>[\\s]*" +
+			"<td>[\\s]*([\\w]+)[\\s]*</td>[\\s]*" + //version
+			"<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w?]+)[\\s]*</td>[\\s]*" + //NTSC/J compatibility
+			"<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w?]+)[\\s]*</td>[\\s]*" + //NTSC/U compatibility
+			"<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w?]+)[\\s]*</td>"; //PAL compatibility
 			
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(content);
 
-			boolean found = false;
-			while (matcher.find()) {
-				console.format("I found the text" +
-					" \"%s\" starting at " +
-					"index %d and ending at index %d.%n",
-					matcher.group(),
-					matcher.start(),
-					matcher.end());
-				found = true;
-			}
+			matcher.find();
+			// System.out.println("\n\n");
+			// System.out.println(matcher.group(1));
+			// System.out.println(matcher.group(2));
+			// System.out.println(matcher.group(3));
+			// System.out.println(matcher.group(4));
 		}
 	}
 	private String getWebsiteContent(String urlString) {
