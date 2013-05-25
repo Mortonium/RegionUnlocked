@@ -13,4 +13,20 @@ public class GameStatus {
 		this.upcCode = upcCode;
 	}
 	
+	private String getWebsiteContent(String urlString) {
+		try {
+			URL url = new URL(urlString);
+			InputStream inStream = url.openStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(inStream));
+			String content = "";
+			String line;
+			while ((line = br.readLine()) != null) {
+				content += line;
+			}
+			return content;
+		} catch (Exception ex) {
+			return "";
+		}
+	}
+	
 }
