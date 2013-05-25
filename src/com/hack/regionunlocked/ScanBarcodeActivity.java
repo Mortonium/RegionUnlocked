@@ -6,6 +6,7 @@ import com.mirasense.scanditsdk.interfaces.ScanditSDKListener;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.Window;
 import android.view.WindowManager;
@@ -33,8 +34,18 @@ public class ScanBarcodeActivity extends Activity
 	}
 	
 	@Override
+	public void onBackPressed(){
+		Intent returnIntent = new Intent();
+		setResult(RESULT_CANCELED, returnIntent);        
+		finish();
+	}
+	
+	@Override
 	public void didScanBarcode(String barcode, String symbology) {
 		mBarcodePicker.stopScanning();
+		Intent returnIntent = new Intent();
+		returnIntent.putExtra("barcode", barcode);
+		setResult(RESULT_OK, returnIntent);
 		finish();
 	}
 

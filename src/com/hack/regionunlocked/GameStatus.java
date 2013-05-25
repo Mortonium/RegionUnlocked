@@ -172,10 +172,10 @@ public class GameStatus {
 		} else {
 			String result = "";
 			for (int i = 0; i < support.size(); i++) {
-				result += "Version: " + GameRegionToString(support.gameRegion) + "\n";
-				result += "\tNTSC/J: " + RegionSupportStatusToString(support.get(GameRegion.NTSC_J)) + "\n";
-				result += "\tNTSC/U: " + RegionSupportStatusToString(support.get(GameRegion.NTSC_U)) + "\n";
-				result += "\tPAL:    " + RegionSupportStatusToString(support.get(GameRegion.PAL)) + "\n";
+				result += "Version: " + GameRegionToString(support.get(i).gameRegion) + "\n";
+				result += "\tNTSC/J: " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_J)) + "\n";
+				result += "\tNTSC/U: " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_U)) + "\n";
+				result += "\tPAL:    " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.PAL)) + "\n";
 				result += "\n";
 			}
 			result += "\n";
@@ -185,11 +185,11 @@ public class GameStatus {
 	
 	private String GameRegionToString(GameRegion region) {
 		switch (region) {
-			case GameRegion.NTSC_J:
+			case NTSC_J:
 				return "NTSC/J";
-			case GameRegion.NTSC_U:
+			case NTSC_U:
 				return "NTSC/U";
-			case GameRegion.PAL:
+			case PAL:
 				return "PAL";
 			default:
 				return "Unknown";
@@ -197,9 +197,9 @@ public class GameStatus {
 	}
 	private String RegionSupportStatusToString(RegionSupportStatus status) {
 		switch (status) {
-			case RegionSupportStatus.Yes:
+			case Yes:
 				return "Yes";
-			case RegionSupportStatus.No:
+			case No:
 				return "No";
 			default:
 				return "Unknown";
