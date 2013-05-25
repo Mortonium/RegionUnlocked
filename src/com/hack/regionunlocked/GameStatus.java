@@ -167,7 +167,7 @@ public class GameStatus {
 		}
 	}
 	
-	private String getSupportAsText() {
+	public String getSupportAsText() {
 		if ((support == null) || (support.size() == 0)) {
 			return "No Results";
 		} else {
