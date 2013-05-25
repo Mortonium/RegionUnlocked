@@ -33,10 +33,12 @@ public class GameStatus {
 			if (found == true)
 				checkStatusWikia();
 			
+			return true;
+			
 		}
 	}
 	
-	private String getScandItName(String upcCode) {
+	private String getScandItName(String upcCode) throws GameStatusException {
 		String url = "https://api.scandit.com/v2/products/" + upcCode + "?"
 				+ scandItKey;
 
@@ -57,7 +59,7 @@ public class GameStatus {
 		}
 	}
 
-	private String getUPCDatabaseName(String upcCode) {
+	private String getUPCDatabaseName(String upcCode) throws GameStatusException {
 		// 885370201215 = Gears of War 3
 		String content = getWebsiteContent("http://www.upcdatabase.com/item/"
 				+ upcCode);
@@ -69,23 +71,24 @@ public class GameStatus {
 
 		try {
 
-			matcher.find();
+			if (!matcher.find())
+				throw new GameStatusException("getUPCDatabaseName fail (No regex match):\n\n" + ex.getMessage());
 			return matcher.group(1);
 
 		} catch (Exception ex) {
-			return "";
+			throw new GameStatusException("getUPCDatabaseName fail:\n\n" + ex.getMessage());
 		}
 
 	}
 
-	private boolean checkNames() {
+	private boolean checkNames() throws GameStatusException {
 		if (name.contains(checkName))
 			return true;
 		else
 			return false;
 	}
 
-	private void checkStatusWikia() {
+	private void checkStatusWikia() throws GameStatusException {
 
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
@@ -104,8 +107,10 @@ public class GameStatus {
 
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(content);
-
+			
+			boolean matchFound = false;
 			while (matcher.find()) {
+				matchFound = true;
 
 				GameRegion region = GameRegion.UNKNOWN;
 				if (matcher.group(1).equals("NTSC/J"))
@@ -152,10 +157,15 @@ public class GameStatus {
 					support.add(set);
 				}
 			}
+			
+			return matchFound;
+			
+		} else {
+			return false;
 		}
 	}
 
-	private String getWebsiteContent(String urlString) {
+	private String getWebsiteContent(String urlString) throws GameStatusException {
 		try {
 			URL url = new URL(urlString);
 			InputStream inStream = url.openStream();
@@ -168,7 +178,7 @@ public class GameStatus {
 			}
 			return content;
 		} catch (Exception ex) {
-			return "";
+			throw new GameStatusException("getWebsiteContent fail:\n\n" + ex.getMessage());
 		}
 	}
 	
