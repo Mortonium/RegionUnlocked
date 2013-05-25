@@ -20,7 +20,7 @@ public class GameStatus {
 	public GameStatus() {
 	
 	}
-	public GameStatusError run(String upcCode) throws GameStatusException {
+	public boolean run(String upcCode) throws GameStatusException {
 		this.upcCode = upcCode;
 		if (upcCode.equals("")) {
 			throw new GameStatusException("No UPC code specified");
