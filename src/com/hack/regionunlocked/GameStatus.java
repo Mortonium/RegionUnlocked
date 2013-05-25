@@ -207,7 +207,6 @@ public class GameStatus implements Runnable {
 			con.setConnectTimeout(15000 /* milliseconds */);
 			con.setRequestMethod("GET");
 			con.setDoInput(true);
-			con.addRequestProperty("Referer", "http://blog.dahanne.net");
 			con.connect();
 			InputStream inStream = con.getInputStream();
 			// URL url = new URL(urlString);
