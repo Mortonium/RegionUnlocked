@@ -52,9 +52,8 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 
 				this.nameUPCDatabase = getUPCDatabaseName(upcCode);
 				this.nameScandit = getScandItName(upcCode);
-				System.out.println(nameUPCDatabase);
-				System.out.println(nameScandit);
-				found = checkNames();
+				//found = checkNames();
+				foudn = true;
 				
 				if (found == true) {
 					return checkStatusWikia();
@@ -179,11 +178,11 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 
 	private boolean checkStatusWikia() throws GameStatusException {
 
-		if (!this.nameUPCDatabase.equals("")) {
+		if (!this.nameScandit.equals("")) {
 			String content = downloadUrl("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
-			System.out.println(this.nameUPCDatabase);
+			
 			String regex = "(?i)<td>[\\s]*<a href=\"[^\"]*\"[^>]*>"
-					+ this.nameUPCDatabase
+					+ this.nameScandit
 					+ "</a>[\\s]*</td>[\\s]*"
 					+ "<td>[\\s]*([\\w]+)[\\s]*</td>[\\s]*"
 					+ // version
