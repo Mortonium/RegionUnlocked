@@ -171,7 +171,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	private boolean checkNames() throws GameStatusException {
-		if (nameScandit.toLowerCase().contains(nameUPCDatabase.toLowerCase()))
+		if ((nameScandit.toLowerCase().contains(nameUPCDatabase.toLowerCase())) || (nameUPCDatabase.toLowerCase().contains(nameScandit.toLowerCase())))
 			return true;
 		else
 			return false;
