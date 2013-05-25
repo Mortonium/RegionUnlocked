@@ -185,6 +185,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	private boolean checkNames() throws GameStatusException {
+		System.out.println("(" + name + ")-(" + checkName + ")");
 		if (name.contains(checkName))
 			return true;
 		else
