@@ -198,9 +198,12 @@ public class GameStatus implements Runnable {
 	private String getWebsiteContent(String urlString) throws GameStatusException {
 		int i = 0;
 		try {
+			listener.setString("3.1");
 			InputStream inStream = retrieveStream(urlString); i++;
+			listener.setString("3.2");
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					inStream)); i++;
+			listener.setString("3.3");
 			String content = "";
 			String line;
 			while ((line = br.readLine()) != null) {
