@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.Reader;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
@@ -138,7 +139,7 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 			} 
 		}
 	}
-	public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+	public String readIt(InputStream stream, int len) throws Exception {
 		Reader reader = null;
 		reader = new InputStreamReader(stream, "UTF-8");        
 		char[] buffer = new char[len];
@@ -150,7 +151,7 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 	
 	
 	
-	private String getScandItName(String upcCode) throws GameStatusException {
+	private String getScandItName(String upcCode) throws Exception {
 		String url = "https://api.scandit.com/v2/products/" + upcCode + "?" + scandItKey;
 
 		// String content = getWebsiteContent(url);
@@ -174,7 +175,7 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 		}
 	}
 
-	private String getUPCDatabaseName(String upcCode) throws GameStatusException {
+	private String getUPCDatabaseName(String upcCode) throws Exception {
 		// 885370201215 = Gears of War 3
 		// String content = getWebsiteContent("http://www.upcdatabase.com/item/" + upcCode);
 		String content = downloadUrl("http://www.upcdatabase.com/item/" + upcCode);
