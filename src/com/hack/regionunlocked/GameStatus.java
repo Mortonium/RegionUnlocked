@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.net.URL;
+import java.net.HttpURLConnection;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -201,7 +202,16 @@ public class GameStatus implements Runnable {
 			listener.setString("3.1");
 			//InputStream inStream = retrieveStream(urlString); i++;
 			URL url = new URL(urlString);
-			InputStream inStream = url.openStream();
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setReadTimeout(10000 /* milliseconds */);
+			con.setConnectTimeout(15000 /* milliseconds */);
+			con.setRequestMethod("GET");
+			con.setDoInput(true);
+			con.addRequestProperty("Referer", "http://blog.dahanne.net");
+			con.connect();
+			InputStream inStream = con.getInputStream();
+			// URL url = new URL(urlString);
+			// InputStream inStream = url.openStream();
 			listener.setString("3.2");
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					inStream)); i++;
