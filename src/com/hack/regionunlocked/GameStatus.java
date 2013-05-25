@@ -183,6 +183,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			String content = downloadUrl("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
 			System.out.println("###" + nameScandit + "###");
 			System.out.println(content.length());
+			System.out.println(content.substring(content.length() - 100, content.length() - 1));
 			String regex = "(?i)<td>[\\s]*<a href=\"[^\"]*\"[^>]*>"
 					+ this.nameScandit
 					+ "</a>[\\s]*</td>[\\s]*"
