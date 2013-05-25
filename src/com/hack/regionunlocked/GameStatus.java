@@ -21,8 +21,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 
 	private String upcCode;
-	private String name;
-	private String checkName;
+	private String nameUPCDatabase;
+	private String nameScandit;
 	private List<RegionSupportStatusSet> support;
 	private String scandItKey = "key=-rdsomoapvSlt5JjXpPNr0WfBpw-H7f5R9JJMnIbw5J";
 	private boolean found = false;
@@ -50,8 +50,8 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				throw new GameStatusException("No UPC code specified");
 			} else {
 
-				this.name = getUPCDatabaseName(upcCode);
-				this.checkName = getScandItName(upcCode);
+				this.nameUPCDatabase = getUPCDatabaseName(upcCode);
+				this.nameScandit = getScandItName(upcCode);
 				found = checkNames();
 				
 				if (found == true) {
@@ -138,7 +138,6 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				strip = strip.substring(0, check);
 				check = strip.indexOf("0");
 				strip = strip.substring(0, check - 9);
-				checkName = strip;
 				return strip;
 			} else {
 				return "";
@@ -170,7 +169,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	private boolean checkNames() throws GameStatusException {
-		if (name.toLowerCase().contains(checkName.toLowerCase()))
+		if (nameScandit.toLowerCase().contains(nameUPCDatabase.toLowerCase()))
 			return true;
 		else
 			return false;
@@ -178,11 +177,11 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 
 	private boolean checkStatusWikia() throws GameStatusException {
 
-		if (!this.name.equals("")) {
+		if (!this.nameUPCDatabase.equals("")) {
 			String content = downloadUrl("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
-			System.out.println(this.name);
+			System.out.println(this.nameUPCDatabase);
 			String regex = "(?i)<td>[\\s]*<a href=\"[^\"]*\"[^>]*>"
-					+ this.name
+					+ this.nameUPCDatabase
 					+ "</a>[\\s]*</td>[\\s]*"
 					+ "<td>[\\s]*([\\w]+)[\\s]*</td>[\\s]*"
 					+ // version
