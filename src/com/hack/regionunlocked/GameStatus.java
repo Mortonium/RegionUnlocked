@@ -196,7 +196,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 																				// compatibility
 
 			regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Halo 4</a>[\\s]*</td>[\\s]*<td>[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w]+)[\\s]*</td>";
-			regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Halo 4";
+			regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Halo 4</a>[\\s]*</td>";
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(content);
 			
