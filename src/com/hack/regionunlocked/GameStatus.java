@@ -16,6 +16,7 @@ public class GameStatus {
 	private List<RegionSupportStatusSet> support;
 	private String scandItKey = "key=-rdsomoapvSlt5JjXpPNr0WfBpw-H7f5R9JJMnIbw5J";
 	private boolean found = false;
+	private boolean failed = false;
 
 	public GameStatus(String upcCode) {
 		this.upcCode = upcCode;
@@ -23,15 +24,16 @@ public class GameStatus {
 		this.checkName = getScandItName(upcCode);
 		found = checkNames();
 
-		if (found == true) {
+		if (found == true)
 			checkStatusWikia();
-		} else {
-			// ERROR CODES
-		}
+	}
+
+	public boolean hasFailed() {
+		return this.failed;
 	}
 
 	private String getScandItName(String upcCode) {
-		String url = "https://api.scandit.com/v2/products/" + upcCode
+		String url = "https://api.scandit.com/v2/products/" + upcCode + "?"
 				+ scandItKey;
 
 		String content = getWebsiteContent(url);
