@@ -34,21 +34,32 @@ public class GameStatus implements Runnable {
 	public void run() {
 		try {
 			this.success = false;
+			listener.setString("1");
 			if (upcCode.equals("")) {
+				listener.setString("2");
 				throw new GameStatusException("No UPC code specified");
 			} else {
 
+				listener.setString("3");
 				this.name = getUPCDatabaseName(upcCode);
+				listener.setString("4");
 				this.checkName = getScandItName(upcCode);
+				listener.setString("5");
 				found = checkNames();
+				listener.setString("6");
 				
-				if (found == true)
+				if (found == true) {
+					listener.setString("7");
 					checkStatusWikia();
+				}
+				listener.setString("8");
 				
 				listener.onGameStatusComplete();
+				listener.setString("9");
 				
 			}
 		} catch (Exception ex) {
+			listener.setString("10");
 			this.success = false;
 			listener.onGameStatusError(ex);
 		}
