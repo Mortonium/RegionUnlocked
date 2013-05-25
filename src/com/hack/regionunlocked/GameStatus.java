@@ -199,7 +199,9 @@ public class GameStatus implements Runnable {
 		int i = 0;
 		try {
 			listener.setString("3.1");
-			InputStream inStream = retrieveStream(urlString); i++;
+			//InputStream inStream = retrieveStream(urlString); i++;
+			URL url = new URL(urlString);
+			InputStream inStream = url.openStream();
 			listener.setString("3.2");
 			BufferedReader br = new BufferedReader(new InputStreamReader(
 					inStream)); i++;
