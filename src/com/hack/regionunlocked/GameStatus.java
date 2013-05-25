@@ -16,22 +16,26 @@ public class GameStatus {
 	private List<RegionSupportStatusSet> support;
 	private String scandItKey = "key=-rdsomoapvSlt5JjXpPNr0WfBpw-H7f5R9JJMnIbw5J";
 	private boolean found = false;
-	private boolean failed = false;
 
-	public GameStatus(String upcCode) {
+	public GameStatus() {
+	
+	}
+	public GameStatusError run(String upcCode) throws GameStatusException {
 		this.upcCode = upcCode;
-		this.name = getUPCDatabaseName(upcCode);
-		this.checkName = getScandItName(upcCode);
-		found = checkNames();
-
-		if (found == true)
-			checkStatusWikia();
+		if (upcCode.equals("")) {
+			throw new GameStatusException("No UPC code specified");
+		} else {
+			
+			this.name = getUPCDatabaseName(upcCode);
+			this.checkName = getScandItName(upcCode);
+			found = checkNames();
+			
+			if (found == true)
+				checkStatusWikia();
+			
+		}
 	}
-
-	public boolean hasFailed() {
-		return this.failed;
-	}
-
+	
 	private String getScandItName(String upcCode) {
 		String url = "https://api.scandit.com/v2/products/" + upcCode + "?"
 				+ scandItKey;
