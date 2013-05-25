@@ -182,6 +182,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		if (!this.nameScandit.equals("")) {
 			String content = downloadUrl("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
 			System.out.println("###" + nameScandit + "###");
+			System.out.println(content);
 			String regex = "(?i)<td>[\\s]*<a href=\"[^\"]*\"[^>]*>"
 					+ this.nameScandit
 					+ "</a>[\\s]*</td>[\\s]*"
@@ -195,7 +196,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 																				// compatibility
 
 			regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Halo 4</a>[\\s]*</td>[\\s]*<td>[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w]+)[\\s]*</td>";
-			regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Halo 4</a>[\\s]*</td>";
+			regex = "Halo 4";
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(content);
 			
