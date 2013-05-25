@@ -143,5 +143,45 @@ public class GameStatus {
 			return "";
 		}
 	}
-
+	
+	private String getSupportAsText() {
+		if ((support == null) || (support.size() == 0)) {
+			return "No Results";
+		} else {
+			String result = "";
+			for (int i = 0; i < support.size(); i++) {
+				result += "Version: " + GameRegionToString(support.gameRegion) + "\n";
+				result += "\tNTSC/J: " + RegionSupportStatusToString(support.get(GameRegion.NTSC_J)) + "\n";
+				result += "\tNTSC/U: " + RegionSupportStatusToString(support.get(GameRegion.NTSC_U)) + "\n";
+				result += "\tPAL:    " + RegionSupportStatusToString(support.get(GameRegion.PAL)) + "\n";
+				result += "\n";
+			}
+			result += "\n";
+			return result;
+		}
+	}
+	
+	private String GameRegionToString(GameRegion region) {
+		switch (region) {
+			case GameRegion.NTSC_J:
+				return "NTSC/J";
+			case GameRegion.NTSC_U:
+				return "NTSC/U";
+			case GameRegion.PAL:
+				return "PAL";
+			default:
+				return "Unknown";
+		}
+	}
+	private String RegionSupportStatusToString(RegionSupportStatus status) {
+		switch (status) {
+			case RegionSupportStatus.Yes:
+				return "Yes";
+			case RegionSupportStatus.No:
+				return "No";
+			default:
+				return "Unknown";
+		}
+	}
+	
 }
