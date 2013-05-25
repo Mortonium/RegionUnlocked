@@ -53,7 +53,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				this.nameUPCDatabase = getUPCDatabaseName(upcCode);
 				this.nameScandit = getScandItName(upcCode);
 				//found = checkNames();
-				foudn = true;
+				found = true;
 				
 				if (found == true) {
 					return checkStatusWikia();
