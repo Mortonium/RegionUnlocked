@@ -12,10 +12,9 @@ public class MainActivity extends Activity {
 	
 	GameStatus scanStatus;
 	
-	protected void setScanStatus(GameStatus s){
-		scanStatus = s;
+	protected void setString(String s){
 		TextView textView1 = (TextView) findViewById(R.id.textView1);
-		textView1.setText(s.getSupportAsText());
+		textView1.setText(s);
 	}
 
 	@Override
@@ -43,8 +42,17 @@ public class MainActivity extends Activity {
 		if (requestCode == 1) {
 
 			if(resultCode == RESULT_OK){      
-				String result=data.getStringExtra("barcode");
-				setScanStatus(new GameStatus(result));
+				String barcode=data.getStringExtra("barcode");
+				String result = "Nothing found with barcode:" + barcode + ".";
+				try{
+					GameStatus status = new GameStatus();
+					if (status.run(barcode)){
+						result = status.getSupportAsText();
+					}
+				}catch (GameStatusException e){
+					result = e.getMessage();
+				}
+				setString(result);
 			}
 			if (resultCode == RESULT_CANCELED) {    
 				//Do nothing! Wait for the user to initiate another go.
