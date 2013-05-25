@@ -19,6 +19,25 @@ public class GameStatus {
 		this.upcCode = upcCode;
 	}
 	
+	private String getUPCDatabaseName(String upcCode) {
+		//885370201215 = Gears of War 3
+		String content = getWebsiteContent("http://www.upcdatabase.com/item/" + upcCode);
+		
+		String regex = "<td>Description</td><td></td><td>(.*?)</td>";
+		
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(content);
+		
+		try {
+			
+			matcher.find();
+			return matcher.group(1);
+			
+		} catch (Exception ex) {
+			return "";
+		}
+		
+	}
 	private void checkStatus() {
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
