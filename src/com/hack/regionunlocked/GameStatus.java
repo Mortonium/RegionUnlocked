@@ -18,7 +18,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class GameStatus extends AsyncTask<String, Void, String> {
+public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 
 	private String upcCode;
 	private String name;
@@ -36,41 +36,6 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 		this.upcCode = upcCode;
 		this.listener = listener;
 	}
-	/*
-	public void run() {
-		try {
-			this.success = false;
-			listener.setString("1");
-			if (upcCode.equals("")) {
-				listener.setString("2");
-				throw new GameStatusException("No UPC code specified");
-			} else {
-
-				listener.setString("3");
-				this.name = getUPCDatabaseName(upcCode);
-				listener.setString("4");
-				this.checkName = getScandItName(upcCode);
-				listener.setString("5");
-				found = checkNames();
-				listener.setString("6");
-				
-				if (found == true) {
-					listener.setString("7");
-					checkStatusWikia();
-				}
-				listener.setString("8");
-				
-				listener.onGameStatusComplete();
-				listener.setString("9");
-				
-			}
-		} catch (Exception ex) {
-			listener.setString("10");
-			this.success = false;
-			listener.onGameStatusError(ex);
-		}
-	}
-	*/
 	public boolean wasSuccessful() {
 		return success;
 	}
@@ -79,7 +44,7 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 	
 	
 	@Override
-	protected String doInBackground(String... urls) {
+	protected boolean doInBackground() {
 		  
 		// params comes from the execute() call: params[0] is the url.
 		try {
@@ -93,21 +58,21 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 				found = checkNames();
 				
 				if (found == true) {
-					checkStatusWikia();
+					return checkStatusWikia();
 				}
 				
-				return "anything";
+				return false;
 				
 			}
 		} catch (Exception e) {
 			this.ex = e;
 			this.success = false;
-			return "Unable to retrieve web page. URL may be invalid." + e;
+			return false;
 		}
 	}
 	// onPostExecute displays the results of the AsyncTask.
 	@Override
-	protected void onPostExecute(String thisdoesntgetused) {
+	protected void onPostExecute(Boolean success) {
 		listener.setString("test end");
 		if (success)
 			listener.onGameStatusComplete();
@@ -131,9 +96,17 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 			int response = conn.getResponseCode();
 			is = conn.getInputStream();
 
+			String content = "";
+			String line;
+			while ((line = br.readLine()) != null) {
+				content += line; i++;
+			}
+			return content;
+			/*
 			// Convert the InputStream into a string
 			String contentAsString = readIt(is, len);
 			return contentAsString;
+			*/
 			
 		// Makes sure that the InputStream is closed after the app is
 		// finished using it.
@@ -208,7 +181,7 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 			return false;
 	}
 
-	private void checkStatusWikia() throws GameStatusException {
+	private boolean checkStatusWikia() throws GameStatusException {
 
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
@@ -279,9 +252,17 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 				}
 			}
 			
+			return matchFound;
+			
+		} else {
+			return false;
 		}
 	}
 
+	
+	
+	
+	
 	private String getWebsiteContent(String urlString) throws GameStatusException {
 		
 		int i = 0;
@@ -347,6 +328,10 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 
      }
 
+	 
+	 
+	 
+	 
 	public String getSupportAsText() {
 		if ((support == null) || (support.size() == 0)) {
 			return "No Results";
