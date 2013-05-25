@@ -90,27 +90,27 @@ public class GameStatus {
 				
 				GameRegion region = GameRegion.UNKNOWN;
 				if (matcher.group(1).equals("NTSC/J"))
-					region = GameRegion.NTSCJ;
+					region = GameRegion.NTSC_J;
 				if (matcher.group(1).equals("NTSC/U") || matcher.group(1).equals("US"))
-					region = GameRegion.NTSCU;
+					region = GameRegion.NTSC_U;
 				if (matcher.group(1).equals("PAL"))
 					region = GameRegion.PAL;
 				if (region != GameRegion.UNKNOWN) {
 					RegionSupportStatusSet set = new RegionSupportStatusSet(region);
 					
 					if (matcher.group(2).equals("Yes"))
-						set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.Yes);
+						set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.Yes);
 					if (matcher.group(2).equals("No"))
-						set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.No);
+						set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.No);
 					if (matcher.group(2).equals("?"))
-						set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.Unknown);
+						set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.Unknown);
 					
 					if (matcher.group(3).equals("Yes"))
-						set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.Yes);
+						set.supportStatuses.put(GameRegion.NTSC_U, RegionSupportStatus.Yes);
 					if (matcher.group(3).equals("No"))
-						set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.No);
+						set.supportStatuses.put(GameRegion.NTSC_U, RegionSupportStatus.No);
 					if (matcher.group(3).equals("?"))
-						set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.Unknown);
+						set.supportStatuses.put(GameRegion.NTSC_U, RegionSupportStatus.Unknown);
 					
 					if (matcher.group(4).equals("Yes"))
 						set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Yes);
