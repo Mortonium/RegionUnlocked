@@ -61,7 +61,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 					return checkStatusWikia();
 				}
 				
-				return false;
+				throw new GameStatusError("Name not found");
 				
 			}
 		} catch (Exception e) {
@@ -152,7 +152,6 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			strip = strip.substring(0, check);
 			check = strip.indexOf("0");
 			strip = strip.substring(0, check - 9);
-			System.out.println(strip);
 			checkName = strip;
 			return strip;
 		} else {
@@ -263,10 +262,12 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				}
 			}
 			
-			return matchFound;
+			if (matchFound)
+				return true;
+			throw new GameStatusException("No Match found for status check");
 			
 		} else {
-			return false;
+			throw new GameStatusException("No name for status checking");
 		}
 	}
 
