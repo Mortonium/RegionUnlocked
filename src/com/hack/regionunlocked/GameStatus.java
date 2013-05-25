@@ -93,22 +93,22 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 					checkStatusWikia();
 				}
 				
-				
+				return "anything";
 				
 			}
-		} catch (IOException e) {
-			return "Unable to retrieve web page. URL may be invalid.";
+		} catch (Exception e) {
+			return "Unable to retrieve web page. URL may be invalid." + e;
 		}
 	}
 	// onPostExecute displays the results of the AsyncTask.
 	@Override
-	protected void onPostExecute() {
+	protected void onPostExecute(String thisdoesntgetused) {
 		listener.setString("test end");
 		if (success)
 			listener.onGameStatusComplete();
-		listener.onGameStatusError();
+		listener.onGameStatusError(new Exception());
 	}
-	private String downloadUrl(String myurl) throws IOException {
+	private String downloadUrl(String myurl) throws Exception {
 		InputStream is = null;
 		// Only display the first 500 characters of the retrieved
 		// web page content.
@@ -124,7 +124,6 @@ public class GameStatus extends AsyncTask<String, Void, String> {
 			// Starts the query
 			conn.connect();
 			int response = conn.getResponseCode();
-			Log.d(DEBUG_TAG, "The response is: " + response);
 			is = conn.getInputStream();
 
 			// Convert the InputStream into a string

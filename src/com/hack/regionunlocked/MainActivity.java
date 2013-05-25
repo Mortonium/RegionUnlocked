@@ -63,8 +63,7 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 				String result = "Looking up " + barcode + ".";
 				try{
 					scanStatus = new GameStatus(barcode, this);
-					Thread gameStatusThread = new Thread(scanStatus);
-					gameStatusThread.start();
+					scanStatus.execute();
 				}catch (Exception e){
 					result = e.toString();
 				}
