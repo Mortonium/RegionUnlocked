@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.hack.regionunlocked.ScanBarcodeActivity"></activity>
+        <activity android:name="com.hack.regionunlocked.ResultsActivity"></activity>
     </application>
 
 </manifest>

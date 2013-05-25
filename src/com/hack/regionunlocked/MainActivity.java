@@ -13,10 +13,14 @@ public class MainActivity extends Activity {
 	GameStatus scanStatus;
 	
 	protected void setScanStatus(GameStatus s){
+		this.startActivity(new Intent(MainActivity.this,ResultsActivity.class)); 
+		setContentView(R.layout.results);
 		scanStatus = s;
-		TextView textView1 = (TextView) findViewById(R.id.textView1);
-		textView1.setText(s.getSupportAsText());
+		TextView textView2 = (TextView) findViewById(R.id.textView2);
+		textView2.setText(s.getSupportAsText());
 	}
+	
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
