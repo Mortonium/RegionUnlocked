@@ -183,6 +183,9 @@ public class GameStatus {
 			return result;
 		}
 	}
+	public List<RegionSupportStatusSet> getSupport() {
+		return support;
+	}
 	
 	private String GameRegionToString(GameRegion region) {
 		switch (region) {
