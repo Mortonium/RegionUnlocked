@@ -217,20 +217,26 @@ public class GameStatus implements Runnable {
 	
 	private InputStream retrieveStream(String url) throws GameStatusException {
 
+		listener.setString("3.1.1");
         DefaultHttpClient client = new DefaultHttpClient();
 
+		listener.setString("3.1.2");
         HttpGet httpRequest = new HttpGet(url);
 
         try {
 
+			listener.setString("3.1.3");
            HttpResponse httpResponse = client.execute(httpRequest);
+			listener.setString("3.1.4");
            final int statusCode = httpResponse.getStatusLine().getStatusCode();
 
+			listener.setString("3.1.5");
            if (statusCode != HttpStatus.SC_OK) {
         	   throw new GameStatusException("retrieveStream fail:\n\n status code: " + statusCode + 
         			   "\nurl: " + url);
            }
 
+			listener.setString("3.1.6");
            HttpEntity httpEntity = httpResponse.getEntity();
            return httpEntity.getContent();
 
