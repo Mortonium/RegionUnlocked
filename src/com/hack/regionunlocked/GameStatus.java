@@ -44,11 +44,12 @@ public class GameStatus implements Runnable {
 				if (found == true)
 					checkStatusWikia();
 				
+				listener.onGameStatusComplete();
+				
 			}
 		} catch (Exception ex) {
 			this.success = false;
-		} finally {
-			listener.onGameStatusComplete();
+			listener.onGameStatusError(ex);
 		}
 	}
 	public boolean wasSuccessful() {
