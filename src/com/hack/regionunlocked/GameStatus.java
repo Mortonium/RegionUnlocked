@@ -8,6 +8,12 @@ import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.net.URL;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 public class GameStatus {
 
 	private String upcCode;
@@ -32,7 +38,7 @@ public class GameStatus {
 			found = checkNames();
 
 			if (found == true)
-				checkStatusWikia();
+				return checkStatusWikia();
 			
 			return true;
 			
@@ -59,7 +65,7 @@ public class GameStatus {
 			return "";
 		}
 		}catch(Exception e){
-			throws new GameStatusException("Couldn't find Game name in scandit");
+			throw new GameStatusException("Couldn't find Game name in scandit");
 		}
 	}
 
@@ -76,7 +82,7 @@ public class GameStatus {
 		try {
 
 			if (!matcher.find())
-				throw new GameStatusException("getUPCDatabaseName fail (No regex match):\n\n" + ex.getMessage());
+				throw new GameStatusException("getUPCDatabaseName fail (No regex match).");
 			return matcher.group(1);
 
 		} catch (Exception ex) {
@@ -92,7 +98,7 @@ public class GameStatus {
 			return false;
 	}
 
-	private void checkStatusWikia() throws GameStatusException {
+	private boolean checkStatusWikia() throws GameStatusException {
 
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
@@ -170,21 +176,48 @@ public class GameStatus {
 	}
 
 	private String getWebsiteContent(String urlString) throws GameStatusException {
+		int i = 0;
 		try {
-			URL url = new URL(urlString);
-			InputStream inStream = url.openStream();
+			InputStream inStream = retrieveStream(urlString); i++;
 			BufferedReader br = new BufferedReader(new InputStreamReader(
-					inStream));
+					inStream)); i++;
 			String content = "";
 			String line;
 			while ((line = br.readLine()) != null) {
-				content += line;
+				content += line; i++;
 			}
 			return content;
 		} catch (Exception ex) {
-			throw new GameStatusException("getWebsiteContent fail:\n\n" + ex.getMessage());
+			throw new GameStatusException("getWebsiteContent fail:\n\n" + ex);
 		}
 	}
+	
+	private InputStream retrieveStream(String url) throws GameStatusException {
+
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        HttpGet httpRequest = new HttpGet(url);
+
+        try {
+
+           HttpResponse httpResponse = client.execute(httpRequest);
+           final int statusCode = httpResponse.getStatusLine().getStatusCode();
+
+           if (statusCode != HttpStatus.SC_OK) {
+        	   throw new GameStatusException("retrieveStream fail:\n\n status code: " + statusCode + 
+        			   "\nurl: " + url);
+           }
+
+           HttpEntity httpEntity = httpResponse.getEntity();
+           return httpEntity.getContent();
+
+        }
+        catch (Exception e) {
+        	httpRequest.abort();
+        	throw new GameStatusException("retrieveStream fail:\n\n url: " + url + "\n\n" + e);
+        }
+
+     }
 
 	public String getSupportAsText() {
 		if ((support == null) || (support.size() == 0)) {
