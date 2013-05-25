@@ -52,7 +52,7 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 	
 	@Override
 	public void onGameStatusError(Exception ex){
-		setString(ex.getMessage());
+		setString(ex.toString());
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

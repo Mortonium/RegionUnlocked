@@ -76,9 +76,11 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		listener.setString("test end");
 		if (success)
 			listener.onGameStatusComplete();
-		if (ex == null)
-			listener.onGameStatusError(new GameStatusException("Unknown Error"));
-		listener.onGameStatusError(ex);
+		else{
+			if (ex != null) listener.onGameStatusError(ex);
+			else listener.onGameStatusError(new GameStatusException("Unknown Error"));
+		}
+		
 	}
 	private String downloadUrl(String myurl) throws GameStatusException {
 		InputStream is = null;
@@ -117,7 +119,11 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			throw new GameStatusException("downloadUrl fail: " + (ex.getMessage() == null ? "" : ex.getMessage()));
 		} finally {
 			if (is != null) {
-				is.close();
+				try{
+					is.close();
+				}catch (Exception e){
+					throw new GameStatusException("failed closing input stream :(");
+				}
 			} 
 		}
 	}
