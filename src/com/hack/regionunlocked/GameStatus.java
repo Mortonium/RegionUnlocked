@@ -15,7 +15,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-public class GameStatus implements Runnable {
+public class GameStatus extends extends AsyncTask<String, Void, String> {
 
 	private String upcCode;
 	private String name;
@@ -31,7 +31,7 @@ public class GameStatus implements Runnable {
 		this.upcCode = upcCode;
 		this.listener = listener;
 	}
-
+	/*
 	public void run() {
 		try {
 			this.success = false;
@@ -65,15 +65,88 @@ public class GameStatus implements Runnable {
 			listener.onGameStatusError(ex);
 		}
 	}
+	*/
 	public boolean wasSuccessful() {
 		return success;
 	}
 	
-	private String getScandItName(String upcCode) throws GameStatusException {
-		String url = "https://api.scandit.com/v2/products/" + upcCode + "?"
-				+ scandItKey;
+	
+	
+	
+	@Override
+	protected String doInBackground(String... urls) {
+		  
+		// params comes from the execute() call: params[0] is the url.
+		try {
+			this.success = false;
+			if (upcCode.equals("")) {
+				throw new GameStatusException("No UPC code specified");
+			} else {
 
-		String content = getWebsiteContent(url);
+				this.name = getUPCDatabaseName(upcCode);
+				this.checkName = getScandItName(upcCode);
+				found = checkNames();
+				
+				if (found == true) {
+					checkStatusWikia();
+				}
+				
+				
+				
+			}
+		} catch (IOException e) {
+			return "Unable to retrieve web page. URL may be invalid.";
+		}
+	}
+	// onPostExecute displays the results of the AsyncTask.
+	@Override
+	protected void onPostExecute() {
+		listener.setString("test end");
+		if (success)
+			listener.onGameStatusComplete();
+		listener.onGameStatusError();
+	}
+	private String downloadUrl(String myurl) throws IOException {
+		InputStream is = null;
+		// Only display the first 500 characters of the retrieved
+		// web page content.
+		int len = 500;
+			
+		try {
+			URL url = new URL(myurl);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setReadTimeout(10000 /* milliseconds */);
+			conn.setConnectTimeout(15000 /* milliseconds */);
+			conn.setRequestMethod("GET");
+			conn.setDoInput(true);
+			// Starts the query
+			conn.connect();
+			int response = conn.getResponseCode();
+			Log.d(DEBUG_TAG, "The response is: " + response);
+			is = conn.getInputStream();
+
+			// Convert the InputStream into a string
+			String contentAsString = readIt(is, len);
+			return contentAsString;
+			
+		// Makes sure that the InputStream is closed after the app is
+		// finished using it.
+		} finally {
+			if (is != null) {
+				is.close();
+			} 
+		}
+	}
+	
+	
+	
+	
+	
+	private String getScandItName(String upcCode) throws GameStatusException {
+		String url = "https://api.scandit.com/v2/products/" + upcCode + "?" + scandItKey;
+
+		// String content = getWebsiteContent(url);
+		String content = downloadUrl(url);
 
 		try{
 		if (content.contains("name")) {
@@ -95,8 +168,8 @@ public class GameStatus implements Runnable {
 
 	private String getUPCDatabaseName(String upcCode) throws GameStatusException {
 		// 885370201215 = Gears of War 3
-		String content = getWebsiteContent("http://www.upcdatabase.com/item/"
-				+ upcCode);
+		// String content = getWebsiteContent("http://www.upcdatabase.com/item/" + upcCode);
+		String content = downloadUrl("http://www.upcdatabase.com/item/" + upcCode);
 
 		String regex = "<td>Description</td><td></td><td>(.*?)</td>";
 
@@ -197,6 +270,7 @@ public class GameStatus implements Runnable {
 	}
 
 	private String getWebsiteContent(String urlString) throws GameStatusException {
+		
 		int i = 0;
 		try {
 			listener.setString("3.1");
@@ -225,6 +299,7 @@ public class GameStatus implements Runnable {
 		} catch (Exception ex) {
 			throw new GameStatusException("getWebsiteContent fail:\n\n" + ex);
 		}
+		
 	}
 	
 	private InputStream retrieveStream(String url) throws GameStatusException {
@@ -311,5 +386,5 @@ public class GameStatus implements Runnable {
 			return "Unknown";
 		}
 	}
-
+	
 }
