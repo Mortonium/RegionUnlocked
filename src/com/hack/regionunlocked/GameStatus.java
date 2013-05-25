@@ -23,6 +23,25 @@ public class GameStatus {
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
 			
+			String regexName = this.name;
+			for (int i = this.name.length() - 1; i >= 0; i--) {
+				
+			}
+			String regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Alan Wake</a>[\\s]*</td>[\\s]*(.*?)</tr>";
+			
+			Pattern pattern = Pattern.compile(regex);
+			Matcher matcher = pattern.matcher(content);
+
+			boolean found = false;
+			while (matcher.find()) {
+				console.format("I found the text" +
+					" \"%s\" starting at " +
+					"index %d and ending at index %d.%n",
+					matcher.group(),
+					matcher.start(),
+					matcher.end());
+				found = true;
+			}
 		}
 	}
 	private String getWebsiteContent(String urlString) {
