@@ -12,7 +12,8 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 	
 	GameStatus scanStatus;
 	
-	protected void setString(String s){
+	@Override
+	public void setString(String s){
 		TextView textView1 = (TextView) findViewById(R.id.textView1);
 		textView1.setText(s);
 	}
@@ -39,6 +40,7 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 	
 	@Override
 	public void onGameStatusComplete(){
+		setString("WOOOOOOOOOOO!");
 		if (scanStatus.wasSuccessful()){
 			setString(scanStatus.getSupportAsText());
 		}else{
@@ -47,7 +49,8 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 	}
 	
 	@Override
-	public void onGameStatusError(GameStatusException ex){
+	public void onGameStatusError(Exception ex){
+		setString("BOOOOOOOOO!");
 		setString(ex.toString());
 	}
 	
@@ -61,6 +64,7 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 				try{
 					scanStatus = new GameStatus(barcode, this);
 					Thread gameStatusThread = new Thread(scanStatus);
+					gameStatusThread.start();
 				}catch (Exception e){
 					result = e.toString();
 				}

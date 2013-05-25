@@ -4,6 +4,8 @@ public interface GameStatusCompleteListener {
 
 	public void onGameStatusComplete();
 	
-	public void onGameStatusError(GameStatusException e);
+	public void onGameStatusError(Exception e);
+	
+	public void setString(String s);
 	
 }

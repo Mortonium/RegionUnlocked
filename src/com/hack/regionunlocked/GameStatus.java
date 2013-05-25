@@ -28,6 +28,7 @@ public class GameStatus implements Runnable {
 
 	public GameStatus(String upcCode, GameStatusCompleteListener listener) {
 		this.upcCode = upcCode;
+		this.listener = listener;
 	}
 
 	public void run() {
