@@ -36,8 +36,7 @@ public class ScanBarcodeActivity extends Activity
 	@Override
 	public void didScanBarcode(String barcode, String symbology) {
 		mBarcodePicker.stopScanning();
-		TextView mainText = (TextView) findViewById(R.id.mainTxt);
-		mainText.setText(barcode);
+	
 		setContentView(R.layout.activity_main);
 	}
 
