@@ -19,6 +19,7 @@ public class GameStatus {
 
 	public GameStatus(String upcCode) {
 		this.upcCode = upcCode;
+		this.name = getUPCDatabaseName(upcCode);
 		this.checkName = getScandItName(upcCode);
 	}
 
@@ -88,52 +89,36 @@ public class GameStatus {
 			while (matcher.find()) {
 				
 				GameRegion region = GameRegion.UNKNOWN;
-				switch (matcher.group(1)) {
-					case "NTSC/J":
-						region = GameRegion.NTSCJ;
-						break;
-					case "NTSC/U": case "US":
-						region = GameRegion.NTSCU;
-						break;
-					case "PAL":
-						region = GameRegion.PAL;
-						break;
-				}
+				if (matcher.group(1).equals("NTSC/J"))
+					region = GameRegion.NTSCJ;
+				if (matcher.group(1).equals("NTSC/U") || matcher.group(1).equals("US"))
+					region = GameRegion.NTSCU;
+				if (matcher.group(1).equals("PAL"))
+					region = GameRegion.PAL;
 				if (region != GameRegion.UNKNOWN) {
 					RegionSupportStatusSet set = new RegionSupportStatusSet(region);
-					switch (matcher.group(2)) {
-						case "Yes":
-							set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.Yes);
-							break;
-						case "No":
-							set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.No);
-							break;
-						case "?":
-							set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.Unknown);
-							break;
-					}
-					switch (matcher.group(3)) {
-						case "Yes":
-							set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.Yes);
-							break;
-						case "No":
-							set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.No);
-							break;
-						case "?":
-							set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.Unknown);
-							break;
-					}
-					switch (matcher.group(4)) {
-						case "Yes":
-							set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Yes);
-							break;
-						case "No":
-							set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.No);
-							break;
-						case "?":
-							set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Unknown);
-							break;
-					}
+					
+					if (matcher.group(2).equals("Yes"))
+						set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.Yes);
+					if (matcher.group(2).equals("No"))
+						set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.No);
+					if (matcher.group(2).equals("?"))
+						set.supportStatuses.put(GameRegion.NTSCJ, RegionSupportStatus.Unknown);
+					
+					if (matcher.group(3).equals("Yes"))
+						set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.Yes);
+					if (matcher.group(3).equals("No"))
+						set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.No);
+					if (matcher.group(3).equals("?"))
+						set.supportStatuses.put(GameRegion.NTSCU, RegionSupportStatus.Unknown);
+					
+					if (matcher.group(4).equals("Yes"))
+						set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Yes);
+					if (matcher.group(4).equals("No"))
+						set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.No);
+					if (matcher.group(4).equals("?"))
+						set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Unknown);
+					
 					support.add(set);
 				}
 				
