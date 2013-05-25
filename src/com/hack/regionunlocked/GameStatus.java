@@ -80,7 +80,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			listener.onGameStatusError(new GameStatusException("Unknown Error"));
 		listener.onGameStatusError(ex);
 	}
-	private String downloadUrl(String myurl) throws Exception {
+	private String downloadUrl(String myurl) throws GameStatusException {
 		InputStream is = null;
 		// Only display the first 500 characters of the retrieved
 		// web page content.
@@ -112,6 +112,8 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			
 		// Makes sure that the InputStream is closed after the app is
 		// finished using it.
+		} catch (Exception ex) {
+			throw new GameStatusException("downloadUrl fail: " + (ex.getMessage() == null ? "" : ex.getMessage()));
 		} finally {
 			if (is != null) {
 				is.close();
