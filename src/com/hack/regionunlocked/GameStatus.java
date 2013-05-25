@@ -40,9 +40,6 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		return success;
 	}
 	
-	
-	
-	
 	@Override
 	protected Boolean doInBackground(Void... lolwut) {
 		  
@@ -183,7 +180,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 
 		if (!this.name.equals("")) {
 			String content = downloadUrl("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
-
+			System.out.println(this.name);
 			String regex = "(?i)<td>[\\s]*<a href=\"[^\"]*\"[^>]*>"
 					+ this.name
 					+ "</a>[\\s]*</td>[\\s]*"
