@@ -2,13 +2,13 @@ package com.hack.regionunlocked;
 
 public class GlobalVariables {
 	
-	private String reigonSetting;
+	private static String regionSetting = "";
 
-	public String getReigonString() {
-		return reigonSetting;
+	public static String getRegionString() {
+		return regionSetting;
 	}
 	
-	public void setReigonSetting(String s){
-		reigonSetting = s;
+	public static void setRegionSetting(String s){
+		regionSetting = s;
 	}
 }

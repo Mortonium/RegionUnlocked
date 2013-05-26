@@ -1,5 +1,6 @@
 package com.hack.regionunlocked;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 
@@ -117,7 +118,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			String content = "";
 			String line;
 			while ((line = br.readLine()) != null) {
-				content += line;
+				content += line + "\n";
 			}
 			return content;
 			/*
@@ -192,99 +193,54 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	private boolean checkStatusWikia() throws GameStatusException {
+		String regionSetting = GlobalVariables.getRegionString();
+		regionSetting = regionSetting.replace("/C","").replace("-","_");
+		boolean userSystemDefined = false;
+		if (regionSetting != null){
+			userSystemDefined = true;
+		}
 
 		if (!this.nameScandit.equals("")) {
-			String content = downloadUrl("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
-			String regex = "(?i)<td>[\\s]*<a href=\"[^\"]*\"[^>]*>"
-					+ this.nameScandit
-					+ "</a>[\\s]*</td>[\\s]*"
-					+ "<td>[\\s]*([\\w/]+)[\\s]*</td>[\\s]*"
-					+ // version
-					"<td[^>]*>[\\s]*([\\w/]+)[\\s]*</td>[\\s]*"
-					+ // NTSC/J compatibility
-					"<td[^>]*>[\\s]*([\\w/]+)[\\s]*</td>[\\s]*"
-					+ // NTSC/U compatibility
-					"<td[^>]*>[\\s]*([\\w/]+)[\\s]*</td>"; // PAL
-																				// compatibility
-
-			//regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Halo 4</a>[\\s]*</td>[\\s]*<td>[\\s]*([\\w/]+)[\\s]*</td>[\\s]*<td[^>]*>[\\s]*([\\w/]+)[\\s]*</td>[\\s]*<td[^>]*>[\\s]*([\\w/]+)[\\s]*</td>[\\s]*<td[^>]*>[\\s]*([\\w/]+)[\\s]*</td>";
-			
-			Pattern pattern = Pattern.compile(regex);
-			Matcher matcher = pattern.matcher(content);
-			
-			boolean matchFound = false;
-			int i = 0;
-			while (matcher.find()) {
-				
-				i++;
-				System.out.println("|MARK" + i + "|");
-				
-				matchFound = true;
-				success = true;
-
+			String query = "select `region`,`ntsc_j`,`ntsc_u`,`pal` from `swdata` where \"" + nameScandit.toLowerCase() + "\"=`title` limit 3";
+			System.out.println("Start query:" + query);
+			query = Uri.encode(query);
+			System.out.println("Coded query:" + query);
+			String csvSource = "https://api.scraperwiki.com/api/1.0/datastore/sqlite?format=csv&name=regionunlocked&query=" + query;
+			System.out.println("Full query:" + csvSource);
+			String csv = downloadUrl(csvSource);
+			String[] csvLines = csv.split("\n");
+			System.out.println("Sample: " + csvLines[1] + " and total result count: " + csvLines.length);
+			for (int i = 1; i < csvLines.length; i++){
+				System.out.println("HI!");
+				String[] values = csvLines[i].split(",");
 				GameRegion region = GameRegion.UNKNOWN;
-				
-				System.out.println("|MARK" + i + ".1|");
-				
-				if (matcher.group(1).equals("NTSC/J"))
-					region = GameRegion.NTSC_J;
-				if (matcher.group(1).equals("NTSC/U")
-						|| matcher.group(1).equals("US"))
-					region = GameRegion.NTSC_U;
-				if (matcher.group(1).equals("PAL"))
-					region = GameRegion.PAL;
-					
-				System.out.println("|MARK" + i + ".2|");
-				
-				if (region != GameRegion.UNKNOWN) {
-				
-					System.out.println("|MARK" + i + ".3|");
-					
-					RegionSupportStatusSet set = new RegionSupportStatusSet(
-							region);
-
-					if (matcher.group(2).equals("Yes"))
-						set.supportStatuses.put(GameRegion.NTSC_J,
-								RegionSupportStatus.Yes);
-					if (matcher.group(2).equals("No"))
-						set.supportStatuses.put(GameRegion.NTSC_J,
-								RegionSupportStatus.No);
-					if (matcher.group(2).equals("?"))
-						set.supportStatuses.put(GameRegion.NTSC_J,
-								RegionSupportStatus.Unknown);
-
-					if (matcher.group(3).equals("Yes"))
-						set.supportStatuses.put(GameRegion.NTSC_U,
-								RegionSupportStatus.Yes);
-					if (matcher.group(3).equals("No"))
-						set.supportStatuses.put(GameRegion.NTSC_U,
-								RegionSupportStatus.No);
-					if (matcher.group(3).equals("?"))
-						set.supportStatuses.put(GameRegion.NTSC_U,
-								RegionSupportStatus.Unknown);
-
-					if (matcher.group(4).equals("Yes"))
-						set.supportStatuses.put(GameRegion.PAL,
-								RegionSupportStatus.Yes);
-					if (matcher.group(4).equals("No"))
-						set.supportStatuses.put(GameRegion.PAL,
-								RegionSupportStatus.No);
-					if (matcher.group(4).equals("?"))
-						set.supportStatuses.put(GameRegion.PAL,
-								RegionSupportStatus.Unknown);
-
-					System.out.println("|MARK" + i + ".4|");
-				
-					support.add(set);
-					System.out.println("|MARK" + i + ".5|");
-				
+				try{
+					region = GameRegion.valueOf(values[0].replace("/","_").toUpperCase());
+				}catch (Exception e){
+					//Do nothing, handled by assigning unknown above.
 				}
+				
+				RegionSupportStatusSet set = new RegionSupportStatusSet(
+						region);
+				if (values[1] != "?")
+					set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.valueOf(values[1]));
+				else set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.Unknown);
+				if (values[2] != "?")
+					set.supportStatuses.put(GameRegion.NTSC_U, RegionSupportStatus.valueOf(values[2]));
+				else set.supportStatuses.put(GameRegion.NTSC_U, RegionSupportStatus.Unknown);
+				if (values[3] != "?")
+					set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.valueOf(values[3]));
+				else set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Unknown);
+				if (userSystemDefined){
+					set.supportStatuses.get(GameRegion.valueOf(regionSetting));
+				}
+				
+				support.add(set);
+				success = true;
 			}
-			
-			if (matchFound)
+			if (success){
 				return true;
-			throw new GameStatusException("No Match found for status check");
-			
+			}else throw new GameStatusException("No Match found for status check");
 		} else {
 			throw new GameStatusException("No name for status checking");
 		}
@@ -492,6 +448,9 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				
 			}
 		}
+	}
+	public String getGameTitle(){
+		return nameScandit;
 	}
 	
 }
