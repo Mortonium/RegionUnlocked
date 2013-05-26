@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -353,10 +354,39 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	NTSC/J
 	*/
 	
+	public HashMap<String,String> getSavedDataList() {
+		if (!checkStorage()) {
+			System.out.println("Storage is inaccessible");
+			return null;
+		} else if (!makeFile()) {
+			System.out.println("File not made");
+			return null;
+		} else {
+			try {
+				BufferedReader reader = new BufferedReader(new FileReader(scanCache));
+				String input = reader.readLine();
+				HashMap<String,String> map = new HashMap<String,String>();
+				
+				while (input != null) {
+					
+					String[] splitStrings = input.split(",");
+					map.put(splitStrings[0], splitStrings[1]);
+					
+					input = reader.readLine();
+				}
+				reader.close();
+				return map;
+			} catch (Exception ex) {
+				return null;
+			}
+		}
+	}
 	public void read(String upcCode) {
 		if (!checkStorage()) {
+			System.out.println("Storage is inaccessible");
 			return;
 		} else if (!makeFile()) {
+			System.out.println("File not made");
 			return;
 		} else {
 			try {
@@ -427,10 +457,10 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	}
 	public void write() {
 		if (!checkStorage()) {
-			System.out.println("Storage is accessible");
+			System.out.println("Storage is inaccessible");
 			return;
 		} else if (!makeFile()) {
-			System.out.println("File made");
+			System.out.println("File not made");
 			return;
 		} else {
 			try {
