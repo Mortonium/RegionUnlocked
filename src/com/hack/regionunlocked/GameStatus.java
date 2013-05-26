@@ -198,15 +198,20 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(content);
 			
-			System.out.println("|MARK1|");
-			
 			boolean matchFound = false;
+			int i = 0;
 			while (matcher.find()) {
+				
+				i++;
+				System.out.println("|MARK" + i + "|");
 				
 				matchFound = true;
 				success = true;
 
 				GameRegion region = GameRegion.UNKNOWN;
+				
+				System.out.println("|MARK" + i + ".1|");
+				
 				if (matcher.group(1).equals("NTSC/J"))
 					region = GameRegion.NTSC_J;
 				if (matcher.group(1).equals("NTSC/U")
@@ -214,7 +219,13 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 					region = GameRegion.NTSC_U;
 				if (matcher.group(1).equals("PAL"))
 					region = GameRegion.PAL;
+					
+				System.out.println("|MARK" + i + ".2|");
+				
 				if (region != GameRegion.UNKNOWN) {
+				
+					System.out.println("|MARK" + i + ".3|");
+					
 					RegionSupportStatusSet set = new RegionSupportStatusSet(
 							region);
 
@@ -248,10 +259,14 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 						set.supportStatuses.put(GameRegion.PAL,
 								RegionSupportStatus.Unknown);
 
+					System.out.println("|MARK" + i + ".4|");
+				
 					support.add(set);
+					System.out.println("|MARK" + i + ".5|");
+				
 				}
 			}
-			System.out.println("|MARK2|");
+			
 			if (matchFound)
 				return true;
 			throw new GameStatusException("No Match found for status check");
