@@ -3,10 +3,12 @@ package com.hack.regionunlocked;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 
 public class MainActivity extends Activity implements GameStatusCompleteListener {
 	
@@ -17,21 +19,35 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 		TextView textView1 = (TextView) findViewById(R.id.textView1);
 		textView1.setText(s);
 	}
+	
+	@Override
+	public void onBackPressed() {
+		finish();
+	}
+
+	protected void setScanStatus(GameStatus s) {
+		startActivity(new Intent(getApplicationContext(), ResultsActivity.class));
+		/*setContentView(R.layout.results);
+		scanStatus = s;
+		TextView textView2 = (TextView) findViewById(R.id.textView2);
+		textView2.setText(s.getSupportAsText());*/
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.activity_main);
 		ImageButton scanButton = (ImageButton) findViewById(R.id.scanButton);
-		onActivityResult(1, RESULT_OK, "885370429671");
-		/*
+
+		//onActivityResult(1, RESULT_OK, "885370429671");
 		scanButton.setOnClickListener(new View.OnClickListener() {
-	    	public void onClick(View v) {
-	    		Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
-	    		startActivityForResult(clickIntent, 1);
-			 }
-		 });
-		 */
+			public void onClick(View v) {
+				Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
+				startActivityForResult(clickIntent, 1);
+			}
+		});
+
 	}
 
 	@Override
@@ -40,6 +56,7 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+
 	
 	@Override
 	public void onGameStatusComplete(){
@@ -70,11 +87,11 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 					result = e.toString();
 				}
 				setString(result);
+
 			}
-			if (resultCode == RESULT_CANCELED) {    
-				//Do nothing! Wait for the user to initiate another go.
-		    }
+			if (resultCode == RESULT_CANCELED) {
+				// Do nothing! Wait for the user to initiate another go.
+			}
 		}
 	}
-
 }
