@@ -181,6 +181,12 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	}
 
 	private boolean checkStatusWikia() throws GameStatusException {
+		String regionSetting = GlobalVariables.getRegionString();
+		regionSetting = regionSetting.replace("/C","").replace("-","_");
+		boolean userSystemDefined = false;
+		if (regionSetting != null){
+			userSystemDefined = true;
+		}
 
 		if (!this.nameScandit.equals("")) {
 			String query = "select `region`,`ntsc_j`,`ntsc_u`,`pal` from `swdata` where \"" + nameScandit.toLowerCase() + "\"=`title` limit 3";
@@ -213,6 +219,9 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				if (values[3] != "?")
 					set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.valueOf(values[3]));
 				else set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Unknown);
+				if (userSystemDefined){
+					set.supportStatuses.get(GameRegion.valueOf(regionSetting));
+				}
 				
 				support.add(set);
 				success = true;
@@ -275,6 +284,10 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		default:
 			return "Unknown";
 		}
+	}
+	
+	public String getGameTitle(){
+		return nameScandit;
 	}
 	
 }
