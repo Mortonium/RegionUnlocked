@@ -30,12 +30,6 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//setting the image size for any screen.
-		DisplayMetrics screenDimensions = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(screenDimensions);
-		int height = screenDimensions.heightPixels;
-		
-		
 		setContentView(R.layout.activity_main);
 		ImageButton scanButton = (ImageButton) findViewById(R.id.scanButton);
 		scanButton.setOnClickListener(new View.OnClickListener() {
