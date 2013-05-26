@@ -35,6 +35,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	public GameStatus(String upcCode, GameStatusCompleteListener listener) {
 		this.upcCode = upcCode;
 		this.listener = listener;
+		support = new HashMap<RegionSupportStatusSet>();
 	}
 	public boolean wasSuccessful() {
 		return success;
