@@ -3,6 +3,7 @@ package com.hack.regionunlocked;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewDebug.FlagToString;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.app.Activity;
@@ -52,6 +53,7 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 		
 		String barcode = getIntent().getStringExtra("barcode");
 		String result = "Looking up " + barcode + ".";
+		
 		try{
 			scanStatus = new GameStatus(barcode, this);
 			scanStatus.execute();
@@ -60,14 +62,24 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 		}
 		setString(result);
 		
-		/*ImageButton scanagainButton = (ImageButton) findViewById(R.id.scanagainButton);
+		Button scanagainButton = (Button) findViewById(R.id.scanagainButton);
 		
 		scanagainButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				finish();
 				Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
-				startActivityForResult(clickIntent, 1);
+				startActivity(clickIntent);
 			}
-		});*/
+		});
+		
+		Button mainButton = (Button) findViewById(R.id.saveButton);
+		mainButton.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				//NEED TO CALL SAVE CLASS WHEN IT IS MADE
+				startActivity(new Intent(getApplicationContext(), Main.class));	
+			}
+		});
 	}
 	
 }
