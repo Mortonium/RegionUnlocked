@@ -23,12 +23,15 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ImageButton scanButton = (ImageButton) findViewById(R.id.scanButton);
-	    scanButton.setOnClickListener(new View.OnClickListener() {
+		onActivityResult(1, RESULT_OK, "88537042967");
+	    /*
+		scanButton.setOnClickListener(new View.OnClickListener() {
 	    	public void onClick(View v) {
 	    		Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
 	    		startActivityForResult(clickIntent, 1);
 			 }
 		 });
+		 */
 	}
 
 	@Override
@@ -56,12 +59,12 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 		setString(ex.toString());
 	}
 	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, String barcode){
+			//int requestCode, int resultCode, Intent data) {
 
 		if (requestCode == 1) {
 
-			if(resultCode == RESULT_OK){      
-				String barcode=data.getStringExtra("barcode");
+			if(resultCode == RESULT_OK){
 				String result = "Looking up " + barcode + ".";
 				try{
 					scanStatus = new GameStatus(barcode, this);
