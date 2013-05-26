@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Region Unlocked</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="main">MAIN\nMENU</string><string name="action_settings">Settings</string>
+    
 
 </resources>
