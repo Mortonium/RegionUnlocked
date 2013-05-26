@@ -376,6 +376,13 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		
 	}
 	
+	/*
+	Save order
+	PAL
+	NTSC/U
+	NTSC/J
+	*/
+	
 	public void read(String upcCode) {
 		if (!checkStorage() {
 			return;
@@ -388,6 +395,56 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				while (input != null) {
 					if (input.beginsWith(upcCode)) {
 						String[] splitStrings = input.split(",");
+						this.upcCode = upcCode;
+						this.nameScandit = splitStrings[1];
+						
+						GameRegion region = GameRegion.UNKNOWN;
+						if (splitStrings[2].equals("NTSC/J"))
+							region = GameRegion.NTSC_J;
+						if (splitStrings[2].equals("NTSC/U"))
+							region = GameRegion.NTSC_U;
+						if (splitStrings[2].equals("PAL"))
+							region = GameRegion.PAL;
+						
+						if (region != GameRegion.UNKNOWN) {
+							
+							RegionSupportStatusSet set = new RegionSupportStatusSet(
+									region);
+
+							if (splitStrings[3].equals("Yes"))
+								set.supportStatuses.put(GameRegion.NTSC_J,
+										RegionSupportStatus.Yes);
+							if (splitStrings[3].equals("No"))
+								set.supportStatuses.put(GameRegion.NTSC_J,
+										RegionSupportStatus.No);
+							if (splitStrings[3].equals("?"))
+								set.supportStatuses.put(GameRegion.NTSC_J,
+										RegionSupportStatus.Unknown);
+
+							if (splitStrings[4].equals("Yes"))
+								set.supportStatuses.put(GameRegion.NTSC_U,
+										RegionSupportStatus.Yes);
+							if (splitStrings[4].equals("No"))
+								set.supportStatuses.put(GameRegion.NTSC_U,
+										RegionSupportStatus.No);
+							if (splitStrings[4].equals("?"))
+								set.supportStatuses.put(GameRegion.NTSC_U,
+										RegionSupportStatus.Unknown);
+
+							if (splitStrings[5].equals("Yes"))
+								set.supportStatuses.put(GameRegion.PAL,
+										RegionSupportStatus.Yes);
+							if (splitStrings[5].equals("No"))
+								set.supportStatuses.put(GameRegion.PAL,
+										RegionSupportStatus.No);
+							if (splitStrings[5].equals("?"))
+								set.supportStatuses.put(GameRegion.PAL,
+										RegionSupportStatus.Unknown);
+
+							support.add(set);
+							
+						}
+						
 					}
 					
 					input = reader.readLine();
