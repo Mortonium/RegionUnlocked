@@ -186,14 +186,14 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 					+ "</a>[\\s]*</td>[\\s]*"
 					+ "<td>[\\s]*([\\w]+)[\\s]*</td>[\\s]*"
 					+ // version
-					"<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w?]+)[\\s]*</td>[\\s]*"
+					"<td[^>]*>[\\s]*([\\w?]+)[\\s]*</td>[\\s]*"
 					+ // NTSC/J compatibility
-					"<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w?]+)[\\s]*</td>[\\s]*"
+					"<td[^>]*>[\\s]*([\\w?]+)[\\s]*</td>[\\s]*"
 					+ // NTSC/U compatibility
-					"<td bgcolor=\"#[A-F0-9]*\">[\\s]*([\\w?]+)[\\s]*</td>"; // PAL
+					"<td[^>]*>[\\s]*([\\w?]+)[\\s]*</td>"; // PAL
 																				// compatibility
 
-			regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Halo 4</a>[\\s]*</td>[\\s]*<td>[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td[^>]*>[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td[^>]*>[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td[^>]*>[\\s]*([\\w]+)[\\s]*</td>";
+			//regex = "<td>[\\s]*<a href=\"[^\"]*\"[^>]*>Halo 4</a>[\\s]*</td>[\\s]*<td>[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td[^>]*>[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td[^>]*>[\\s]*([\\w]+)[\\s]*</td>[\\s]*<td[^>]*>[\\s]*([\\w]+)[\\s]*</td>";
 			
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(content);
