@@ -356,18 +356,27 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	}
 	private boolean makeFile() {
 
-		File sdcard = new File(Environment.getExternalStorageDirectory().toString());
-		if (sdcard.isDirectory()) {
-			folder = new File(sdcard + "/" + folderName);
+		File sdCard = new File(Environment.getExternalStorageDirectory().toString());
+		System.out.println("sdCard: " + sdCard.toString();
+		if (sdCard.isDirectory()) {
+			System.out.println("sdCard exists");
+			folder = new File(sdCard + "/" + folderName);
+			System.out.println("folder: " + folder.toString();
 			if (!folder.isDirectory()) {
+				System.out.println("folder does not exist");
 				folder.mkdir();
+				System.out.println("folder made");
 			}
-			File scanCache = new File(folder + "/" + scanCacheName);
+			scanCache = new File(folder + "/" + scanCacheName);
+			System.out.println("scanCache: " + scanCache.toString();
 			if (!scanCache.isFile()) {
+				System.out.println("scanCache does not exist");
 				try {
 					scanCache.createNewFile();
+					System.out.println("scanCache made");
 					return true;
 				} catch (IOException e) {
+					System.out.println("scanCache failed to make");
 					e.printStackTrace();
 					return false;
 				}
