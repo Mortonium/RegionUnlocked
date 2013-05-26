@@ -23,7 +23,7 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ImageButton scanButton = (ImageButton) findViewById(R.id.scanButton);
-		onActivityResult(1, RESULT_OK, "88537042967");
+		onActivityResult(1, RESULT_OK, "885370429671");
 	    /*
 		scanButton.setOnClickListener(new View.OnClickListener() {
 	    	public void onClick(View v) {
