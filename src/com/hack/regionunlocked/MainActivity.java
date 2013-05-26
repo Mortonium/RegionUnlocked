@@ -24,7 +24,7 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 		setContentView(R.layout.activity_main);
 		ImageButton scanButton = (ImageButton) findViewById(R.id.scanButton);
 		onActivityResult(1, RESULT_OK, "885370429671");
-	    /*
+		/*
 		scanButton.setOnClickListener(new View.OnClickListener() {
 	    	public void onClick(View v) {
 	    		Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
@@ -43,14 +43,11 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 	
 	@Override
 	public void onGameStatusComplete(){
-		setString("WOOOOOOOOOOO!");
-		/*
 		if (scanStatus.wasSuccessful()){
 			setString(scanStatus.getSupportAsText());
 		}else{
 			setString("Not found in databases.");
 		}
-		*/
 	}
 	
 	@Override

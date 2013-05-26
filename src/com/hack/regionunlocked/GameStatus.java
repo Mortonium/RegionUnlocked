@@ -2,6 +2,7 @@ package com.hack.regionunlocked;
 
 import android.os.AsyncTask;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -35,7 +36,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	public GameStatus(String upcCode, GameStatusCompleteListener listener) {
 		this.upcCode = upcCode;
 		this.listener = listener;
-		support = new HashMap<RegionSupportStatusSet>();
+		support = new ArrayList<RegionSupportStatusSet>();
 	}
 	public boolean wasSuccessful() {
 		return success;
