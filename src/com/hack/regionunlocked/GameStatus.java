@@ -93,9 +93,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			conn.setReadTimeout(30000 /* milliseconds */);
 			conn.setConnectTimeout(15000 /* milliseconds */);
 			conn.setRequestMethod("GET");
-			conn.setRequestProperty(
-                "User-Agent",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:5.0) Gecko/20100101 Firefox/5.0");
+			//conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:5.0) Gecko/20100101 Firefox/5.0");
 			conn.setDoInput(true);
 			// Starts the query
 			conn.connect();
