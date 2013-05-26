@@ -2,12 +2,9 @@ package com.hack.regionunlocked;
 
 import android.app.Activity;
 import android.os.Bundle;
-<<<<<<< HEAD
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-=======
->>>>>>> master
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
