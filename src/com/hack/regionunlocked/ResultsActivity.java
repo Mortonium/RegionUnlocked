@@ -1,7 +1,9 @@
 package com.hack.regionunlocked;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewDebug.FlagToString;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -47,6 +49,7 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.results);
+		
 		String barcode = getIntent().getStringExtra("barcode");
 		String result = "Looking up " + barcode + ".";
 		try{
@@ -56,14 +59,15 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 			result = e.toString();
 		}
 		setString(result);
-		/*ImageButton scanButton = (ImageButton) findViewById(R.id.scanButton);
-	    scanButton.setOnClickListener(new View.OnClickListener() {
-	    	public void onClick(View v) {
-	    		Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
-	    		startActivityForResult(clickIntent, 1);
-			 }
-		 });*/
 		
+		ImageButton scanagainButton = (ImageButton) findViewById(R.id.scanagainButton);
+		
+		scanagainButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
+				startActivityForResult(clickIntent, 1);
+			}
+		});
 	}
 	
 }
