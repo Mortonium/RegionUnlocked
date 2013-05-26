@@ -18,32 +18,33 @@ public class GameStatus {
 	private boolean found = false;
 
 	public GameStatus() {
-	
+
 	}
+
 	public boolean run(String upcCode) throws GameStatusException {
 		this.upcCode = upcCode;
 		if (upcCode.equals("")) {
 			throw new GameStatusException("No UPC code specified");
 		} else {
-			
+
 			this.name = getUPCDatabaseName(upcCode);
 			this.checkName = getScandItName(upcCode);
 			found = checkNames();
-			
+
 			if (found == true)
 				checkStatusWikia();
-			
+
 		}
 	}
-	
+
 	private String getScandItName(String upcCode) {
 		String url = "https://api.scandit.com/v2/products/" + upcCode + "?"
 				+ scandItKey;
 
 		String content = getWebsiteContent(url);
 
+		try{
 		if (content.contains("name")) {
-
 			String strip = content.substring(18);
 			int check = strip.indexOf("\"");
 			strip = strip.substring(0, check);
@@ -54,6 +55,9 @@ public class GameStatus {
 			return strip;
 		} else {
 			return "";
+		}
+		}catch(Exception e){
+			throws new GameStatusException("Couldn't find Game name in scandit");
 		}
 	}
 
@@ -171,48 +175,57 @@ public class GameStatus {
 			return "";
 		}
 	}
-	
+
 	public String getSupportAsText() {
 		if ((support == null) || (support.size() == 0)) {
 			return "No Results";
 		} else {
 			String result = "";
 			for (int i = 0; i < support.size(); i++) {
-				result += "Version: " + GameRegionToString(support.get(i).gameRegion) + "\n";
-				result += "\tNTSC/J: " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_J)) + "\n";
-				result += "\tNTSC/U: " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_U)) + "\n";
-				result += "\tPAL:    " + RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.PAL)) + "\n";
+				result += "Version: "
+						+ GameRegionToString(support.get(i).gameRegion) + "\n";
+				result += "\tNTSC/J: "
+						+ RegionSupportStatusToString(support.get(i).supportStatuses
+								.get(GameRegion.NTSC_J)) + "\n";
+				result += "\tNTSC/U: "
+						+ RegionSupportStatusToString(support.get(i).supportStatuses
+								.get(GameRegion.NTSC_U)) + "\n";
+				result += "\tPAL:    "
+						+ RegionSupportStatusToString(support.get(i).supportStatuses
+								.get(GameRegion.PAL)) + "\n";
 				result += "\n";
 			}
 			result += "\n";
 			return result;
 		}
 	}
+
 	public List<RegionSupportStatusSet> getSupport() {
 		return support;
 	}
-	
+
 	private String GameRegionToString(GameRegion region) {
 		switch (region) {
-			case NTSC_J:
-				return "NTSC/J";
-			case NTSC_U:
-				return "NTSC/U";
-			case PAL:
-				return "PAL";
-			default:
-				return "Unknown";
+		case NTSC_J:
+			return "NTSC/J";
+		case NTSC_U:
+			return "NTSC/U";
+		case PAL:
+			return "PAL";
+		default:
+			return "Unknown";
 		}
 	}
+
 	private String RegionSupportStatusToString(RegionSupportStatus status) {
 		switch (status) {
-			case Yes:
-				return "Yes";
-			case No:
-				return "No";
-			default:
-				return "Unknown";
+		case Yes:
+			return "Yes";
+		case No:
+			return "No";
+		default:
+			return "Unknown";
 		}
 	}
-	
+
 }
