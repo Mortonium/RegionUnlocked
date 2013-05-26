@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.Reader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.net.URL;
 import java.net.HttpURLConnection;
 
@@ -33,6 +35,12 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	
 	private Exception ex;
 
+	private String folderName = "RegionUnlocked";
+	private File folder;
+	
+	private String scanCacheName = "scanCache.csv";
+	private File scanCache;
+	
 	public GameStatus(String upcCode, GameStatusCompleteListener listener) {
 		this.upcCode = upcCode;
 		this.listener = listener;
@@ -327,6 +335,73 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			return "No";
 		default:
 			return "Unknown";
+		}
+	}
+	
+	private boolean checkStorage() {
+		
+		String state = Environment.getExternalStorageState();
+		
+		if (Environment.MEDIA_MOUNTED.equals(state))
+			return true;
+		else if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))
+			return false;
+		else 
+			return false;
+		
+	}
+	private boolean makeFile() {
+
+		File sdcard = new File(Environment.getExternalStorageDirectory().toString());
+		if (sdcard.isDirectory()) {
+			folder = new File(sdcard + "/" + foldername);
+			if (!folder.isDirectory()) {
+				folder.mkdir();
+			}
+			File scanCache = new File(folder + "/" + scanCacheName);
+			if (!scanCache.isFile()) {
+				try {
+					scanCache.createNewFile();
+					return true;
+				} catch (IOException e) {
+					e.printStackTrace();
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+		
+	}
+	
+	public void read() {
+		if (!checkStorage() {
+			return;
+		} else if (!makeFile()) {
+			return;
+		} else {
+			
+		}
+	}
+	public void write() {
+		if (!checkStorage() {
+			return;
+		} else if (!makeFile()) {
+			return;
+		} else {
+			try {
+				BufferedWriter writer = new BufferedWriter(new FileWriter(scanCache, true));
+				for (int i = 0; i < support.size(); i++) {
+					writer.append(upcCode + ",\"" + nameScandit + "\",");
+					writer.append(GameRegionToString(support.get(0).gameRegion) + ",");
+					writer.append(RegionSupportStatusToString(support.get(0).supportStatuses.get(PAL)) + ",");
+					writer.append(RegionSupportStatusToString(support.get(0).supportStatuses.get(NTSC_U)) + ",");
+					writer.append(RegionSupportStatusToString(support.get(0).supportStatuses.get(NTSC_J)) + "\n");
+				}
+				writer.close();
+			} catch (Exception ex) {
+				
+			}
 		}
 	}
 	

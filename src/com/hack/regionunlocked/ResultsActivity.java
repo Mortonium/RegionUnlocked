@@ -77,7 +77,7 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 			
 			public void onClick(View v) {
 				//NEED TO CALL SAVE CLASS WHEN IT IS MADE
-				startActivity(new Intent(getApplicationContext(), Main.class));	
+				scanStatus.write();
 			}
 		});
 	}
