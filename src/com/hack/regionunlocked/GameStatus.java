@@ -471,18 +471,21 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	}
 	public void write() {
 		if (!checkStorage()) {
+			System.out.println("Storage is accessible");
 			return;
 		} else if (!makeFile()) {
+			System.out.println("File made");
 			return;
 		} else {
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(scanCache, true));
+				System.out.println("Writer made");
 				for (int i = 0; i < support.size(); i++) {
-					writer.append(upcCode + ",\"" + nameScandit + "\",");
-					writer.append(GameRegionToString(support.get(i).gameRegion) + ",");
-					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.PAL)) + ",");
-					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_U)) + ",");
-					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_J)) + "\n");
+					writer.write(upcCode + ",\"" + nameScandit + "\",");
+					writer.write(GameRegionToString(support.get(i).gameRegion) + ",");
+					writer.write(RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.PAL)) + ",");
+					writer.write(RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_U)) + ",");
+					writer.write(RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_J)) + "\n");
 				}
 				writer.close();
 			} catch (Exception ex) {
