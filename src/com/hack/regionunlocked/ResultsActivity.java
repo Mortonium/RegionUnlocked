@@ -60,14 +60,14 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 		}
 		setString(result);
 		
-		ImageButton scanagainButton = (ImageButton) findViewById(R.id.scanagainButton);
+		/*ImageButton scanagainButton = (ImageButton) findViewById(R.id.scanagainButton);
 		
 		scanagainButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
 				startActivityForResult(clickIntent, 1);
 			}
-		});
+		});*/
 	}
 	
 }
