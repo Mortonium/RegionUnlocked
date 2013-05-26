@@ -33,7 +33,13 @@ public class MainActivity extends Activity {
 				startActivityForResult(clickIntent, 1);
 			}
 		});
-
+		
+		ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsButton);
+		settingsButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				startActivity(new Intent(getApplicationContext(), Settings.class));
+			}
+		});
 	}
 
 	@Override
