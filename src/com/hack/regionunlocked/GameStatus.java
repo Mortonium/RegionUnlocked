@@ -63,7 +63,6 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			this.ex = e;
 			this.success = false;
 			return false;
