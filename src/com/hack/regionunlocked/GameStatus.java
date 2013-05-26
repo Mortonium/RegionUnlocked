@@ -181,9 +181,6 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 
 		if (!this.nameScandit.equals("")) {
 			String content = downloadUrl("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
-			System.out.println("###" + nameScandit + "###");
-			System.out.println(content.length());
-			System.out.println(content.substring(content.length() - 100, content.length() - 1));
 			String regex = "(?i)<td>[\\s]*<a href=\"[^\"]*\"[^>]*>"
 					+ this.nameScandit
 					+ "</a>[\\s]*</td>[\\s]*"
@@ -201,9 +198,11 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(content);
 			
+			System.out.println("|MARK1|");
+			
 			boolean matchFound = false;
 			while (matcher.find()) {
-				System.out.println("#####################\n#######################\n####################");
+				
 				matchFound = true;
 				success = true;
 
@@ -252,7 +251,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 					support.add(set);
 				}
 			}
-			
+			System.out.println("|MARK2|");
 			if (matchFound)
 				return true;
 			throw new GameStatusException("No Match found for status check");
