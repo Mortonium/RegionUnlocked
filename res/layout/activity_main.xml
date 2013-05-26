@@ -20,12 +20,9 @@
     <ImageButton
         android:id="@+id/scanButton"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:src="@drawable/camera"
         android:scaleType="centerCrop"
-        android:background="@null"
-        android:paddingBottom="100dp"
-        android:paddingTop="100dp" />
+        android:background="@null" />
 
     <LinearLayout 
         android:orientation="horizontal"
