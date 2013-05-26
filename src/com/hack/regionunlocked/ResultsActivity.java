@@ -1,18 +1,19 @@
 package com.hack.regionunlocked;
 
 import android.os.Bundle;
+import android.view.ViewDebug.FlagToString;
+import android.widget.TextView;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Intent;
 
-
-
 public class ResultsActivity extends Activity {
-
+	
 	@Override
 	public void onBackPressed() {
-		finish();
+		 //this.startActivity(new Intent(ResultsActivity.this,MainActivity.class));
 		
-		 this.startActivity(new Intent(ResultsActivity.this,MainActivity.class));  
+		startActivity(new Intent(getApplicationContext(), MainActivity.class));
 	}
 	
 	@Override
@@ -26,5 +27,6 @@ public class ResultsActivity extends Activity {
 	    		startActivityForResult(clickIntent, 1);
 			 }
 		 });*/
+		
 	}
 }
