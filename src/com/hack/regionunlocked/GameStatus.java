@@ -10,10 +10,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.Reader;
+import java.io.FileReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.net.URL;
 import java.net.HttpURLConnection;
+import java.io.File;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -374,13 +376,26 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		
 	}
 	
-	public void read() {
+	public void read(String upcCode) {
 		if (!checkStorage() {
 			return;
 		} else if (!makeFile()) {
 			return;
 		} else {
-			
+			try {
+				BufferedReader reader = new BufferedReader(new FileReader(scanCache, true));
+				String input = reader.readLine();
+				while (input != null) {
+					if (input.beginsWith(upcCode)) {
+						String[] splitStrings = input.split(",");
+					}
+					
+					input = reader.readLine();
+				}
+				reader.close();
+			} catch (Exception ex) {
+				
+			}
 		}
 	}
 	public void write() {
@@ -393,10 +408,10 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(scanCache, true));
 				for (int i = 0; i < support.size(); i++) {
 					writer.append(upcCode + ",\"" + nameScandit + "\",");
-					writer.append(GameRegionToString(support.get(0).gameRegion) + ",");
-					writer.append(RegionSupportStatusToString(support.get(0).supportStatuses.get(PAL)) + ",");
-					writer.append(RegionSupportStatusToString(support.get(0).supportStatuses.get(NTSC_U)) + ",");
-					writer.append(RegionSupportStatusToString(support.get(0).supportStatuses.get(NTSC_J)) + "\n");
+					writer.append(GameRegionToString(support.get(i).gameRegion) + ",");
+					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(PAL)) + ",");
+					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(NTSC_U)) + ",");
+					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(NTSC_J)) + "\n");
 				}
 				writer.close();
 			} catch (Exception ex) {
