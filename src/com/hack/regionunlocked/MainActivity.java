@@ -32,9 +32,9 @@ public class MainActivity extends Activity {
 		ImageButton scanButton = (ImageButton) findViewById(R.id.scanButton);
 		scanButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Intent clickIntent = new Intent(/*getApplicationContext()*/MainActivity.this,
+				Intent clickIntent = new Intent(getApplicationContext(),
 						ScanBarcodeActivity.class);
-				//startActivityForResult(clickIntent, 1);
+				startActivityForResult(clickIntent, 1);
 			}
 		});
 	}
