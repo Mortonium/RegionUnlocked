@@ -16,11 +16,19 @@ public class GameStatus {
 	private String checkName;
 	private List<RegionSupportStatusSet> support;
 	private String scandItKey = "key=-rdsomoapvSlt5JjXpPNr0WfBpw-H7f5R9JJMnIbw5J";
+	private boolean found = false;
 
 	public GameStatus(String upcCode) {
 		this.upcCode = upcCode;
 		this.name = getUPCDatabaseName(upcCode);
 		this.checkName = getScandItName(upcCode);
+		found = checkNames();
+
+		if (found == true) {
+			checkStatusWikia();
+		} else {
+			// ERROR CODES
+		}
 	}
 
 	private String getScandItName(String upcCode) {
@@ -40,7 +48,6 @@ public class GameStatus {
 			checkName = strip;
 			return strip;
 		} else {
-			System.out.println("ERROR");
 			return "";
 		}
 	}
@@ -65,9 +72,16 @@ public class GameStatus {
 		}
 
 	}
-	
+
+	private boolean checkNames() {
+		if (name.contains(checkName))
+			return true;
+		else
+			return false;
+	}
+
 	private void checkStatusWikia() {
-		
+
 		if (!this.name.equals("")) {
 			String content = getWebsiteContent("http://gaming.wikia.com/wiki/Region_Free_Xbox_360_Games");
 
@@ -87,43 +101,52 @@ public class GameStatus {
 			Matcher matcher = pattern.matcher(content);
 
 			while (matcher.find()) {
-				
+
 				GameRegion region = GameRegion.UNKNOWN;
 				if (matcher.group(1).equals("NTSC/J"))
 					region = GameRegion.NTSC_J;
-				if (matcher.group(1).equals("NTSC/U") || matcher.group(1).equals("US"))
+				if (matcher.group(1).equals("NTSC/U")
+						|| matcher.group(1).equals("US"))
 					region = GameRegion.NTSC_U;
 				if (matcher.group(1).equals("PAL"))
 					region = GameRegion.PAL;
 				if (region != GameRegion.UNKNOWN) {
-					RegionSupportStatusSet set = new RegionSupportStatusSet(region);
-					
+					RegionSupportStatusSet set = new RegionSupportStatusSet(
+							region);
+
 					if (matcher.group(2).equals("Yes"))
-						set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.Yes);
+						set.supportStatuses.put(GameRegion.NTSC_J,
+								RegionSupportStatus.Yes);
 					if (matcher.group(2).equals("No"))
-						set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.No);
+						set.supportStatuses.put(GameRegion.NTSC_J,
+								RegionSupportStatus.No);
 					if (matcher.group(2).equals("?"))
-						set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.Unknown);
-					
+						set.supportStatuses.put(GameRegion.NTSC_J,
+								RegionSupportStatus.Unknown);
+
 					if (matcher.group(3).equals("Yes"))
-						set.supportStatuses.put(GameRegion.NTSC_U, RegionSupportStatus.Yes);
+						set.supportStatuses.put(GameRegion.NTSC_U,
+								RegionSupportStatus.Yes);
 					if (matcher.group(3).equals("No"))
-						set.supportStatuses.put(GameRegion.NTSC_U, RegionSupportStatus.No);
+						set.supportStatuses.put(GameRegion.NTSC_U,
+								RegionSupportStatus.No);
 					if (matcher.group(3).equals("?"))
-						set.supportStatuses.put(GameRegion.NTSC_U, RegionSupportStatus.Unknown);
-					
+						set.supportStatuses.put(GameRegion.NTSC_U,
+								RegionSupportStatus.Unknown);
+
 					if (matcher.group(4).equals("Yes"))
-						set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Yes);
+						set.supportStatuses.put(GameRegion.PAL,
+								RegionSupportStatus.Yes);
 					if (matcher.group(4).equals("No"))
-						set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.No);
+						set.supportStatuses.put(GameRegion.PAL,
+								RegionSupportStatus.No);
 					if (matcher.group(4).equals("?"))
-						set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Unknown);
-					
+						set.supportStatuses.put(GameRegion.PAL,
+								RegionSupportStatus.Unknown);
+
 					support.add(set);
 				}
-				
 			}
-			
 		}
 	}
 
