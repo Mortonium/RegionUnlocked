@@ -66,9 +66,8 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 		
 		scanagainButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				finish();
 				Intent clickIntent = new Intent(getApplicationContext(), ScanBarcodeActivity.class);
-				startActivity(clickIntent);
+				startActivityForResult(clickIntent, 1);
 			}
 		});
 		
@@ -80,6 +79,21 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 				scanStatus.write();
 			}
 		});
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (requestCode == 1) {
+			
+			if(resultCode == RESULT_OK){
+				Intent resultsIntent = new Intent(getApplicationContext(), ResultsActivity.class);
+				resultsIntent.putExtra("barcode", data.getStringExtra("barcode"));
+				startActivity(resultsIntent);
+			}
+			if (resultCode == RESULT_CANCELED) {
+				// Do nothing! Wait for the user to initiate another go.
+			}
+		}
 	}
 	
 }
