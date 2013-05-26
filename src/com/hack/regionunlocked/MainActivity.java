@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_main);
-		ImageButton scanButton = (ImageButton) findViewById(R.id.scanButton);
+		Button scanButton = (Button) findViewById(R.id.scanButton);
 
 		//onActivityResult(1, RESULT_OK, "885370429671");
 		scanButton.setOnClickListener(new View.OnClickListener() {
@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 			}
 		});
 		
-		ImageButton settingsButton = (ImageButton) findViewById(R.id.settingsButton);
+		Button settingsButton = (Button) findViewById(R.id.settingsButton);
 		settingsButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(), Settings.class));

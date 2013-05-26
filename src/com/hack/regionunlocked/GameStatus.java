@@ -1,11 +1,13 @@
 package com.hack.regionunlocked;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -356,7 +358,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 
 		File sdcard = new File(Environment.getExternalStorageDirectory().toString());
 		if (sdcard.isDirectory()) {
-			folder = new File(sdcard + "/" + foldername);
+			folder = new File(sdcard + "/" + folderName);
 			if (!folder.isDirectory()) {
 				folder.mkdir();
 			}
@@ -384,16 +386,16 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 	*/
 	
 	public void read(String upcCode) {
-		if (!checkStorage() {
+		if (!checkStorage()) {
 			return;
 		} else if (!makeFile()) {
 			return;
 		} else {
 			try {
-				BufferedReader reader = new BufferedReader(new FileReader(scanCache, true));
+				BufferedReader reader = new BufferedReader(new FileReader(scanCache));
 				String input = reader.readLine();
 				while (input != null) {
-					if (input.beginsWith(upcCode)) {
+					if (input.startsWith(upcCode)) {
 						String[] splitStrings = input.split(",");
 						this.upcCode = upcCode;
 						this.nameScandit = splitStrings[1];
@@ -456,7 +458,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		}
 	}
 	public void write() {
-		if (!checkStorage() {
+		if (!checkStorage()) {
 			return;
 		} else if (!makeFile()) {
 			return;
@@ -466,9 +468,9 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				for (int i = 0; i < support.size(); i++) {
 					writer.append(upcCode + ",\"" + nameScandit + "\",");
 					writer.append(GameRegionToString(support.get(i).gameRegion) + ",");
-					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(PAL)) + ",");
-					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(NTSC_U)) + ",");
-					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(NTSC_J)) + "\n");
+					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.PAL)) + ",");
+					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_U)) + ",");
+					writer.append(RegionSupportStatusToString(support.get(i).supportStatuses.get(GameRegion.NTSC_J)) + "\n");
 				}
 				writer.close();
 			} catch (Exception ex) {
