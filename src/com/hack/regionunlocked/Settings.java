@@ -2,7 +2,6 @@ package com.hack.regionunlocked;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -11,7 +10,6 @@ public class Settings extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
-		final GlobalVariables setting = new GlobalVariables();
 
 		/*
 		 * if(PAL.isChecked()){ setting.setReigonSetting((String)
@@ -30,14 +28,14 @@ public class Settings extends Activity {
 
 			public void onCheckedChanged(RadioGroup group, int id) {
 				if (id == (R.id.radPal)) {
-					setting.setReigonSetting((String) PAL.getText());
+					GlobalVariables.setRegionSetting((String) PAL.getText());
 				} else if (id == (R.id.radNTSCJ)) {
-					setting.setReigonSetting((String) NSTCJ.getText());
+					GlobalVariables.setRegionSetting((String) NSTCJ.getText());
 				} else if (id == (R.id.radNTSCUC)) {
-					setting.setReigonSetting((String) NSTCUC.getText());
+					GlobalVariables.setRegionSetting((String) NSTCUC.getText());
 				}
 				
-				System.out.println(setting.getReigonString());
+				System.out.println(GlobalVariables.getRegionString());
 			}
 		});
 		
