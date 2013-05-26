@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.hack.regionunlocked.ScanBarcodeActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name="com.hack.regionunlocked.ResultsActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".ResultsActivity" android:screenOrientation="portrait"></activity>
         
     </application>
 

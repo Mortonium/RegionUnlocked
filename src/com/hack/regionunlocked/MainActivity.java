@@ -10,27 +10,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 
-public class MainActivity extends Activity implements GameStatusCompleteListener {
+public class MainActivity extends Activity {
 	
 	GameStatus scanStatus;
 	
 	@Override
-	public void setString(String s){
-		TextView textView1 = (TextView) findViewById(R.id.textView1);
-		textView1.setText(s);
-	}
-	
-	@Override
 	public void onBackPressed() {
 		finish();
-	}
-
-	protected void setScanStatus(GameStatus s) {
-		startActivity(new Intent(getApplicationContext(), ResultsActivity.class));
-		/*setContentView(R.layout.results);
-		scanStatus = s;
-		TextView textView2 = (TextView) findViewById(R.id.textView2);
-		textView2.setText(s.getSupportAsText());*/
 	}
 
 	@Override
@@ -56,38 +42,15 @@ public class MainActivity extends Activity implements GameStatusCompleteListener
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-
 	
-	@Override
-	public void onGameStatusComplete(){
-		if (scanStatus.wasSuccessful()){
-			setString(scanStatus.getSupportAsText());
-		}else{
-			setString("Not found in databases.");
-		}
-	}
-	
-	@Override
-	public void onGameStatusError(Exception ex){
-		System.out.println("Because fuck you, that's why.");
-		setString(ex.toString());
-	}
-	
-	protected void onActivityResult(int requestCode, int resultCode, String barcode){
-			//int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 		if (requestCode == 1) {
-
+			
 			if(resultCode == RESULT_OK){
-				String result = "Looking up " + barcode + ".";
-				try{
-					scanStatus = new GameStatus(barcode, this);
-					scanStatus.execute();
-				}catch (Exception e){
-					result = e.toString();
-				}
-				setString(result);
-
+				Intent resultsIntent = new Intent(getApplicationContext(), ResultsActivity.class);
+				resultsIntent.putExtra("barcode", data.getStringExtra("barcode"));
+				startActivity(resultsIntent);
 			}
 			if (resultCode == RESULT_CANCELED) {
 				// Do nothing! Wait for the user to initiate another go.
