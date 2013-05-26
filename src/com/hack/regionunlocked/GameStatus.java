@@ -223,6 +223,7 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				
 				RegionSupportStatusSet set = new RegionSupportStatusSet(
 						region);
+				
 				if (values[1] != "?")
 					set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.valueOf(values[1]));
 				else set.supportStatuses.put(GameRegion.NTSC_J, RegionSupportStatus.Unknown);
@@ -232,9 +233,9 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 				if (values[3] != "?")
 					set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.valueOf(values[3]));
 				else set.supportStatuses.put(GameRegion.PAL, RegionSupportStatus.Unknown);
-				if (userSystemDefined){
-					set.supportStatuses.get(GameRegion.valueOf(regionSetting));
-				}
+				//if (userSystemDefined){
+				//	set.supportStatuses.get(GameRegion.valueOf(regionSetting));
+				//}
 				
 				support.add(set);
 				success = true;
