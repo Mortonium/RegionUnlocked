@@ -355,7 +355,8 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 		
 	}
 	private boolean makeFile() {
-
+		
+		System.out.println("Finding sdCard");
 		File sdCard = new File(Environment.getExternalStorageDirectory().toString());
 		System.out.println("sdCard: " + sdCard.toString();
 		if (sdCard.isDirectory()) {
