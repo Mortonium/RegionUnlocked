@@ -13,6 +13,7 @@ import android.content.Intent;
 public class ResultsActivity extends Activity implements GameStatusCompleteListener  {
 	
 	GameStatus scanStatus;
+	String output;
 	
 	@Override
 	public void setString(String s){
@@ -23,7 +24,13 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 	@Override
 	public void onGameStatusComplete(){
 		if (scanStatus.wasSuccessful()){
-			setString(scanStatus.getSupportAsText());
+			
+			TextView resultText = (TextView) findViewById(R.id.textView1);
+			resultText.setText(output);
+			
+			TextView gameName = (TextView) findViewById(R.id.gameName);
+			gameName.setText(scanStatus.getGameTitle());
+			
 		}else{
 			setString("Not found in databases.");
 		}
@@ -60,7 +67,8 @@ public class ResultsActivity extends Activity implements GameStatusCompleteListe
 		}catch (Exception e){
 			result = e.toString();
 		}
-		setString(result);
+		
+		output = result;
 		
 		Button scanagainButton = (Button) findViewById(R.id.scanagainButton);
 		
