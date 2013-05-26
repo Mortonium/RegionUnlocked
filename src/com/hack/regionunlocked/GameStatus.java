@@ -365,8 +365,10 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 			System.out.println("folder: " + folder.toString();
 			if (!folder.isDirectory()) {
 				System.out.println("folder does not exist");
-				folder.mkdir();
-				System.out.println("folder made");
+				if (folder.mkdir())
+					System.out.println("folder made");
+				else
+					System.out.println("folder failed to make");
 			}
 			scanCache = new File(folder + "/" + scanCacheName);
 			System.out.println("scanCache: " + scanCache.toString();
