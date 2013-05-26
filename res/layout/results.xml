@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -6,43 +6,25 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
-
+    tools:context=".MainActivity"
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/textView1"
+        android:paddingTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView2"
-        android:layout_marginLeft="56dp"
-        android:layout_marginTop="109dp"
-        android:layout_toRightOf="@+id/textView2"
         android:text="RESULTS"
         android:textAppearance="?android:attr/textAppearanceSmall" />
     
-        <ImageButton
-        android:id="@+id/mainmenuButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_launcher"
-        android:layout_weight="1" />
-
-    <ImageButton
-        android:id="@+id/scanagainButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+                <FrameLayout
+            android:layout_width="fill_parent" android:layout_height="fill_parent"
+            android:layout_weight="1">
+        </FrameLayout>
     
-        android:src="@drawable/ic_launcher"
-        android:layout_weight="1" />
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:orientation="horizontal" >
 
         <ImageButton
@@ -64,4 +46,4 @@
             android:src="@drawable/ic_launcher" />
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

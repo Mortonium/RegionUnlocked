@@ -3,6 +3,7 @@ package com.hack.regionunlocked;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -11,15 +12,8 @@ public class Settings extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
+		
 		final GlobalVariables setting = new GlobalVariables();
-
-		/*
-		 * if(PAL.isChecked()){ setting.setReigonSetting((String)
-		 * PAL.getText()); }else if(NSTCJ.isChecked()){
-		 * setting.setReigonSetting((String) NSTCJ.getText()); }else
-		 * if(NSTCUC.isChecked()){ setting.setReigonSetting((String)
-		 * NSTCUC.getText()); }
-		 */
 
 		final RadioButton PAL = (RadioButton) findViewById(R.id.radPal);
 		final RadioButton NSTCJ = (RadioButton) findViewById(R.id.radNTSCJ);
@@ -41,5 +35,12 @@ public class Settings extends Activity {
 			}
 		});
 		
+		ImageButton back = (ImageButton) findViewById(R.id.imageButton1);
+		back.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				finish();
+			}
+		});
 	}
 }
