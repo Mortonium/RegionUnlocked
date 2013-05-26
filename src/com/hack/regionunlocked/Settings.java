@@ -3,6 +3,7 @@ package com.hack.regionunlocked;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -35,7 +36,7 @@ public class Settings extends Activity {
 			}
 		});
 		
-		ImageButton back = (ImageButton) findViewById(R.id.imageButton1);
+		Button back = (Button) findViewById(R.id.imageButton1);
 		back.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {

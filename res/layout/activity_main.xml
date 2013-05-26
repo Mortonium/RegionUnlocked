@@ -23,7 +23,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="@drawable/camera"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+         />
 
     <LinearLayout 
         android:orientation="horizontal"
@@ -37,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/scanButton"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_launcher"
+        android:text="Settings"
         android:layout_weight="1" />
 
     <Button
@@ -46,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/scanButton"
-        android:src="@drawable/ic_launcher"
+        android:text="My Scans"
         android:layout_weight="1" />
     
     </LinearLayout>
