@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#32B405" >
 
     <RadioGroup
         android:id="@+id/radioGroup1"
@@ -14,19 +15,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="PAL" />
+            android:text="PAL"
+            android:textColor="#CCCCCC" />
 
         <RadioButton
             android:id="@+id/radNTSCJ"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NTSC-J" />
+            android:text="NTSC-J"
+            android:textColor="#CCCCCC" />
 
         <RadioButton
             android:id="@+id/radNTSCUC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NTSC-U/C" />
+            android:text="NTSC-U/C"
+            android:textColor="#CCCCCC" />
     </RadioGroup>
 
             <FrameLayout
