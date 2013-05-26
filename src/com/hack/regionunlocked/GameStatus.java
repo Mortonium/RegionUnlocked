@@ -382,13 +382,13 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 									region);
 
 							if (splitStrings[3].equals("Yes"))
-								set.supportStatuses.put(GameRegion.NTSC_J,
+								set.supportStatuses.put(GameRegion.PAL,
 										RegionSupportStatus.Yes);
 							if (splitStrings[3].equals("No"))
-								set.supportStatuses.put(GameRegion.NTSC_J,
+								set.supportStatuses.put(GameRegion.PAL,
 										RegionSupportStatus.No);
 							if (splitStrings[3].equals("?"))
-								set.supportStatuses.put(GameRegion.NTSC_J,
+								set.supportStatuses.put(GameRegion.PAL,
 										RegionSupportStatus.Unknown);
 
 							if (splitStrings[4].equals("Yes"))
@@ -402,13 +402,13 @@ public class GameStatus extends AsyncTask<Void, Void, Boolean> {
 										RegionSupportStatus.Unknown);
 
 							if (splitStrings[5].equals("Yes"))
-								set.supportStatuses.put(GameRegion.PAL,
+								set.supportStatuses.put(GameRegion.NTSC_J,
 										RegionSupportStatus.Yes);
 							if (splitStrings[5].equals("No"))
-								set.supportStatuses.put(GameRegion.PAL,
+								set.supportStatuses.put(GameRegion.NTSC_J,
 										RegionSupportStatus.No);
 							if (splitStrings[5].equals("?"))
-								set.supportStatuses.put(GameRegion.PAL,
+								set.supportStatuses.put(GameRegion.NTSC_J,
 										RegionSupportStatus.Unknown);
 
 							support.add(set);
